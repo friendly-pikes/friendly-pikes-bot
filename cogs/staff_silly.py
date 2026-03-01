@@ -16,8 +16,32 @@ class StaffSilly(commands.Cog):
         self.bot: DiscordBot = bot
 
     @commands.command()
+    async def explode(self, ctx: CustomContext, user: discord.Member = None):
+        if not permissions.can_run_staff_cmd(ctx.author):
+            await ctx.reply("You don't have permission to use that command.")
+            return
+        
+        ## Testy Test
+        roleId = 1477803664407003340
+
+        if ctx.guild.id == 1438414082448425111:
+            roleId = 1477749083404767364
+        
+        # We need a user to cutinate god damn it!
+        # (checking if user was given with command)
+        if user != None:
+            role = ctx.guild.get_role(roleId)
+
+            if role in user.roles:
+                await user.remove_roles(role)
+                await ctx.reply(f"{user.mention} has unexploded.. how.")
+            else:
+                await user.add_roles(role)
+                await ctx.reply(f"https://tenor.com/view/cat-explosion-sad-explode-gif-15295996165959499721")
+
+    @commands.command()
     async def cutinate(self, ctx: CustomContext, user: discord.Member = None):
-        if not permissions.can_run_staff_cmd(user):
+        if not permissions.can_run_staff_cmd(ctx.author):
             await ctx.reply("You don't have permission to use that command.")
             return
         
@@ -41,7 +65,7 @@ class StaffSilly(commands.Cog):
 
     @commands.command()
     async def smolinate(self, ctx: CustomContext, user: discord.Member = None):
-        if not permissions.can_run_staff_cmd(user):
+        if not permissions.can_run_staff_cmd(ctx.author):
             await ctx.reply("You don't have permission to use that command.")
             return
         
@@ -63,34 +87,33 @@ class StaffSilly(commands.Cog):
                 await user.add_roles(role)
                 await ctx.reply(f"{user.mention} has invoked of the wrath of the smolinator!")
          
-    @commands.command()
-    async def shortinate(self, ctx: CustomContext, user: discord.Member = None):
-        if not permissions.can_run_staff_cmd(user):
-            await ctx.reply("You don't have permission to use that command.")
-            return
+    # @commands.command()
+    # async def shortinate(self, ctx: CustomContext, user: discord.Member = None):
+    #     if not permissions.can_run_staff_cmd(ctx.author):
+    #         await ctx.reply("You don't have permission to use that command.")
+    #         return
         
-        ## Testy Test
-        roleId = 1477781226910912563
+    #     ## Testy Test
+    #     roleId = 1477781226910912563
 
-        if ctx.guild.id == 1438414082448425111:
-            roleId = 1477749196366020780
+    #     if ctx.guild.id == 1438414082448425111:
+    #         roleId = 1477749196366020780
         
-        # We need a user to cutinate god damn it!
-        # (checking if user was given with command)
-        if user != None:
-            role = ctx.guild.get_role(roleId)
+    #     # We need a user to cutinate god damn it!
+    #     # (checking if user was given with command)
+    #     if user != None:
+    #         role = ctx.guild.get_role(roleId)
 
-            if role in user.roles:
-                await user.remove_roles(role)
-                await ctx.reply(f"{user.mention} has been released from the shortinator!")
-            else:
-                await user.add_roles(role)
-                await ctx.reply(f"{user.mention} has invoked of the wrath of the shortinator!")
-         
+    #         if role in user.roles:
+    #             await user.remove_roles(role)
+    #             await ctx.reply(f"{user.mention} has been released from the shortinator!")
+    #         else:
+    #             await user.add_roles(role)
+    #             await ctx.reply(f"{user.mention} has invoked of the wrath of the shortinator!")
 
     @commands.command()
     async def uncutinate(self, ctx: CustomContext, user: discord.Member = None):
-        if not permissions.can_run_staff_cmd(user):
+        if not permissions.can_run_staff_cmd(ctx.author):
             await ctx.reply("You don't have permission to use that command.")
             return
         
@@ -111,7 +134,7 @@ class StaffSilly(commands.Cog):
 
     @commands.command()
     async def unsmolinate(self, ctx: CustomContext, user: discord.Member = None):
-        if not permissions.can_run_staff_cmd(user):
+        if not permissions.can_run_staff_cmd(ctx.author):
             await ctx.reply("You don't have permission to use that command.")
             return
         
@@ -130,26 +153,26 @@ class StaffSilly(commands.Cog):
                 await user.remove_roles(role)
                 await ctx.reply(f"{user.mention} has been released from the smolinator!")
         
-    @commands.command()
-    async def unshortinate(self, ctx: CustomContext, user: discord.Member = None):
-        if not permissions.can_run_staff_cmd(user):
-            await ctx.reply("You don't have permission to use that command.")
-            return
+    # @commands.command()
+    # async def unshortinate(self, ctx: CustomContext, user: discord.Member = None):
+    #     if not permissions.can_run_staff_cmd(ctx.author):
+    #         await ctx.reply("You don't have permission to use that command.")
+    #         return
         
-        ## Testy Test
-        roleId = 1477781226910912563
+    #     ## Testy Test
+    #     roleId = 1477781226910912563
 
-        if ctx.guild.id == 1438414082448425111:
-            roleId = 1477749196366020780
+    #     if ctx.guild.id == 1438414082448425111:
+    #         roleId = 1477749196366020780
         
-        # We need a user to cutinate god damn it!
-        # (checking if user was given with command)
-        if user != None:
-            role = ctx.guild.get_role(roleId)
+    #     # We need a user to cutinate god damn it!
+    #     # (checking if user was given with command)
+    #     if user != None:
+    #         role = ctx.guild.get_role(roleId)
 
-            if role in user.roles:
-                await user.remove_roles(role)
-                await ctx.reply(f"{user.mention} has been released from theshortinate!")
+    #         if role in user.roles:
+    #             await user.remove_roles(role)
+    #             await ctx.reply(f"{user.mention} has been released from theshortinate!")
         
 async def setup(bot):
     await bot.add_cog(StaffSilly(bot))
