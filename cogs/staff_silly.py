@@ -33,10 +33,10 @@ class StaffSilly(commands.Cog):
             role = ctx.guild.get_role(roleId)
 
             if role in user.roles:
-                await user.remove_roles(role)
+                await user.remove_roles(role, "They unexploded")
                 await ctx.reply(f"{user.mention} has unexploded.. how.")
             else:
-                await user.add_roles(role)
+                await user.add_roles(role, "They exploded")
                 await ctx.reply(f"https://tenor.com/view/cat-explosion-sad-explode-gif-15295996165959499721")
 
     @commands.command()
@@ -57,10 +57,10 @@ class StaffSilly(commands.Cog):
             role = ctx.guild.get_role(roleId)
 
             if role in user.roles:
-                await user.remove_roles(role)
+                await user.remove_roles(role, "They've been released from the cutinator")
                 await ctx.reply(f"{user.mention} has been released from the cutinator!")
             else:
-                await user.add_roles(role)
+                await user.add_roles(role, "They invoked the cutinator")
                 await ctx.reply(f"{user.mention} has invoked of the wrath of the cutinator!")
 
     @commands.command()
@@ -81,10 +81,10 @@ class StaffSilly(commands.Cog):
             role = ctx.guild.get_role(roleId)
 
             if role in user.roles:
-                await user.remove_roles(role)
+                await user.remove_roles(role, "They've been released from the smolinator.")
                 await ctx.reply(f"{user.mention} has been released from the smolinator!")
             else:
-                await user.add_roles(role)
+                await user.add_roles(role, "They invoked the smolinator.")
                 await ctx.reply(f"{user.mention} has invoked of the wrath of the smolinator!")
          
     # @commands.command()
@@ -105,10 +105,10 @@ class StaffSilly(commands.Cog):
     #         role = ctx.guild.get_role(roleId)
 
     #         if role in user.roles:
-    #             await user.remove_roles(role)
+    #             await user.remove_roles(role, "They've been released from the shortinator")
     #             await ctx.reply(f"{user.mention} has been released from the shortinator!")
     #         else:
-    #             await user.add_roles(role)
+    #             await user.add_roles(role, "They've invoked the shortinator")
     #             await ctx.reply(f"{user.mention} has invoked of the wrath of the shortinator!")
 
     @commands.command()
@@ -129,7 +129,7 @@ class StaffSilly(commands.Cog):
             role = ctx.guild.get_role(roleId)
 
             if role in user.roles:
-                await user.remove_roles(role)
+                await user.remove_roles(role, "They've been released from the cutinator")
                 await ctx.reply(f"{user.mention} has been released from the cutinator!")
 
     @commands.command()
@@ -150,7 +150,7 @@ class StaffSilly(commands.Cog):
             role = ctx.guild.get_role(roleId)
 
             if role in user.roles:
-                await user.remove_roles(role)
+                await user.remove_roles(role, "They've been released from the smolinator")
                 await ctx.reply(f"{user.mention} has been released from the smolinator!")
         
     # @commands.command()
@@ -171,8 +171,8 @@ class StaffSilly(commands.Cog):
     #         role = ctx.guild.get_role(roleId)
 
     #         if role in user.roles:
-    #             await user.remove_roles(role)
-    #             await ctx.reply(f"{user.mention} has been released from theshortinate!")
+    #             await user.remove_roles(role, "They've been released from the shortinator")
+    #             await ctx.reply(f"{user.mention} has been released from the shortinator!")
         
 async def setup(bot):
     await bot.add_cog(StaffSilly(bot))
