@@ -16,7 +16,18 @@ class Users(commands.Cog):
     async def cutedar(self, ctx: CustomContext, user: discord.Member = None):
         if user:
             percent = random.randint(1, 100)
-            embed = DiscordBot.create_embed(self.bot, "Cute Radar 🎀", f"{user.mention} is {percent}% cute! 🎀", discord.Color.pink())
+
+            # Pixie / Pixel Vortex / Victor is 0% cute!
+            if user.id == 1262124659814695005:
+                percent = 0
+
+            if percent == 67:
+                if random.randomint(1, 2) == 1:
+                    percent = percent - 1
+                else:
+                    percent = percent + 2
+
+            embed = DiscordBot.create_embed(self.bot, "🎀 Cute Radar 🎀", f"{user.mention} is {percent}% cute! 🎀", discord.Color.pink())
 
             await ctx.reply(embed=embed)
         else:

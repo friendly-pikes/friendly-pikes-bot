@@ -5,23 +5,22 @@ from discord.ext import commands
 if TYPE_CHECKING:
     from utils.default import CustomContext
 
-def can_run_staff_cmd(ctx: "CustomContext"):
-    author = ctx.author
+def can_run_staff_cmd(user: discord.Member):
 
     ## Snowy's Test Server
-    if ctx.guild.id == 1438414082448425111:
+    if user.guild.id == 1438414082448425111:
         # 1439229829000986846 - Admin
-        if author.get_role(1439229829000986846):
+        if user.get_role(1439229829000986846):
             return True
     # Actual Server
-    elif ctx.guild.id == 1414222707570118656:
-        if author.get_role(1477590575577436181):
+    elif user.guild.id == 1414222707570118656:
+        if user.get_role(1477590575577436181):
             return True
-        if author.get_role(1419064979499389082):
+        if user.get_role(1419064979499389082):
             return True
-        if author.get_role(1419064592427909261):
+        if user.get_role(1419064592427909261):
             return True
-        if author.get_role(1477488631982723153):
+        if user.get_role(1477488631982723153):
             return True
         
     return False

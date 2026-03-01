@@ -34,6 +34,16 @@ class DiscordBot(AutoShardedBot):
 
         return embed
     
+    """When the bot connects"""
+    async def on_connect(self):
+        # You gotta be hidden!
+        await self.change_presence(status=discord.Status.invisible)
+
+    """When the bot is ready"""
+    async def on_ready(self):
+        print(f"\nLogged in as {self.user.name}")
+        await self.change_presence(status=discord.Status.invisible)
+
     async def setup_hook(self):
         for file in os.listdir("cogs"):
             if not file.endswith(".py"):
@@ -49,9 +59,28 @@ class DiscordBot(AutoShardedBot):
 
         await self.process_commands(msg)
 
-    async def on_member_join(member):
-        print(member.id)
-        # if member.id in banishUserIds:
+    async def on_member_join(self, member):
+        roleId = 1477496210414768243
+        channelId = 1418951533688655989
+
+        # Test
+        if member.guild.id == 1438414082448425111:
+            roleId = 1477575309476761672
+            channelId = 1473069052128661545
+
+        if member.id in banishUserIds:
+            role = member.guild.get_role(roleId)
+            channel = member.guild.get_channel(channelId)
+            
+            embed = DiscordBot.create_embed(
+                self,
+                "Dammy Files Banisher",
+                f"User {member.global_name} was banished. Reason being they are in the Dammy Files.\n\nUser Info:\nUser - {member.global_name}\nUserID - {member.id}",
+                discord.Color.pink()
+            )
+
+            await member.add_roles(role)
+            await channel.send(embed=embed)
 
         
     async def process_commands(self, msg):
