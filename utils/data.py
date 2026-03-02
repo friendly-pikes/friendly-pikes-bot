@@ -104,8 +104,27 @@ class DiscordBot(AutoShardedBot):
         if not self.is_ready() or msg.author.bot or \
            not permissions.can_handle(msg, "send_messages"):
             return
+        
+        ctx = await self.get_context(msg, cls=default.CustomContext)
+        if ctx.valid:
+            await self.invoke(ctx)
+        else:
+            ## PETITION BAN 67!!
+            if permissions.can_run_staff_cmd(msg.author) == False:
+                if "67" in msg.content or "6-7" in msg.content \
+                    or "six seven" in msg.content.lower():
 
-        await self.process_commands(msg)
+                    await msg.reply("Banished term detected.")
+                    await msg.delete()
+                
+                ## Ban talking about the dammy files
+                elif "dammy files" in msg.content.lower():
+                    await msg.reply("Please don't talk about that.")
+                    await msg.delete()
+        # await self.process_commands(msg)
+
+
+        
 
     async def on_member_join(self, member):
         roleId = 1477496210414768243
