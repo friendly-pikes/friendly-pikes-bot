@@ -40,7 +40,7 @@ class SemiFunc():
         
             if do_what == "remove":
                 try:
-                    if inator_text == "explode":
+                    if inator_type == "explode":
                         await user.remove_roles(ctx.guild.get_role(role), reason=f"They unexploded")
                         await ctx.send(f"{user.mention} has unexploded.. how.")
                     else:
@@ -51,7 +51,7 @@ class SemiFunc():
             else:
                 try:
                     if user.get_role(role) == None:
-                        if inator_text == "explode":
+                        if inator_type == "explode":
                             await user.add_roles(ctx.guild.get_role(role), reason=f"They exploded")
                             await ctx.send("https://tenor.com/view/cat-explosion-sad-explode-gif-15295996165959499721")
                         else:
@@ -63,7 +63,7 @@ class SemiFunc():
                     print(f"An error as occured with pikes_inator!\n{e}")
                 
             await asyncio.sleep(1)
-            
+
             role_ids_b = role_ids[f"roles{idsPre}"]
 
             ## If user doesn't have any vanity roles, remove the seperator
