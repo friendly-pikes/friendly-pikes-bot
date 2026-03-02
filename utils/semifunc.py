@@ -1,12 +1,15 @@
 import asyncio
 import discord
+import random
 
-# from utils.data import DiscordBot
+from utils.data import DiscordBot
 from utils.default import CustomContext
 from utils.data import ServerInfo
 
 server_ids = ServerInfo.server_ids
 role_ids = ServerInfo.role_ids
+ignore_ids = ServerInfo.ignore_radar_ids
+forced_ids = ServerInfo.forced_radar_ids
 
 def get_inator_text(inator_type: str):
     inator_type = inator_type.lower()
@@ -18,6 +21,48 @@ class SemiFunc():
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
     
+    async def pikes_radar(bot, user: discord.Member, radar: str):
+        percent = random.randint(1, 100)
+        embed = DiscordBot.create_embed(bot, "", "", discord.Color.pink())
+
+        if percent == 67:
+            if random.randint(1, 2) == 1:
+                percent = percent - 1
+            else:
+                percent = percent + 2
+
+        if radar == "cute":
+            if user.id in ignore_ids["cute"]:
+                percent = 0
+        elif radar == "gay":
+            if user.id in ignore_ids["gay"]:
+                percent = 0
+                
+            if user.id in forced_ids:
+                percent = 101
+
+            if user.id == 888072934114074624:
+                percent = 0
+
+        emoji = "🎀"
+
+        if radar == "gay":
+            emoji = "🏳️‍🌈"
+        # elif radar == "bi":
+        #     emoji = "❤️💜💙"
+
+        embed.title = f"{emoji} {radar.capitalize()} Radar {emoji}"
+        embed.description = f"{user.mention} is {percent}% {radar}! {emoji}"
+        embed.color = discord.Color.pink()
+        
+        if radar == "cute" and percent >= 80:
+            embed.description = f"{embed.description}\n{user.global_name} is totally cute!"
+        elif radar == "gay" and percent >= 50:
+            embed.description = f"{embed.description}\n{user.global_name} is totally gay!"
+
+
+        return embed
+
     async def pikes_inator(bot, ctx: CustomContext, user: discord.Member, inator_type:str, do_what: str):
         vanity_role_sep = 0
         role = 0
@@ -42,10 +87,10 @@ class SemiFunc():
                 try:
                     if inator_type == "explode":
                         await user.remove_roles(ctx.guild.get_role(role), reason=f"They unexploded")
-                        await ctx.send(f"{user.mention} has unexploded.. how.")
+                        await ctx.reply(f"{user.mention} has unexploded.. how.")
                     else:
                         await user.remove_roles(ctx.guild.get_role(role), reason=f"They've been released from the {inator_text}")
-                        await ctx.send(f"{user.mention} has been released from the {inator_text}!")
+                        await ctx.reply(f"{user.mention} has been released from the {inator_text}!")
                 except Exception as e:
                     print(f"An error as occured with pikes_inator!\n{e}")
             else:
@@ -53,10 +98,10 @@ class SemiFunc():
                     if user.get_role(role) == None:
                         if inator_type == "explode":
                             await user.add_roles(ctx.guild.get_role(role), reason=f"They exploded")
-                            await ctx.send("https://tenor.com/view/cat-explosion-sad-explode-gif-15295996165959499721")
+                            await ctx.reply("https://tenor.com/view/cat-explosion-sad-explode-gif-15295996165959499721")
                         else:
                             await user.add_roles(ctx.guild.get_role(role), reason=f"They invoked the {inator_text}")
-                            await ctx.send(f"{user.mention} has invoked of the wrath of the {inator_text}!")
+                            await ctx.reply(f"{user.mention} has invoked of the wrath of the {inator_text}!")
                     else:
                         await ctx.send(f"{user.mention} has already invoked of the wrath of the {inator_text}. They can't invoke the {inator_text} again.")
                 except Exception as e:
@@ -67,7 +112,7 @@ class SemiFunc():
             role_ids_b = role_ids[f"roles{idsPre}"]
 
             ## If user doesn't have any vanity roles, remove the seperator
-            if user.get_role(role_ids_b["cute"]) == None and user.get_role(role_ids_b["smol"]) == None and user.get_role(role_ids_b["explode"]) == None:
+            if user.get_role(role_ids_b["cute"]) == None and user.get_role(role_ids_b["smol"]) == None and user.get_role(role_ids_b["explode"]) == None and user.get_role(role_ids_b["tall"]) == None:
                 # safe guard cuz I'm just now adding vanity seperator to the code
                 if user.get_role(vanity_role_sep):
                     await user.remove_roles(ctx.guild.get_role(vanity_role_sep), reason="No longer needs the seperator")

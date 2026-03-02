@@ -37,7 +37,8 @@ class ServerInfo():
             "cute": 1477781229599199434,
             "shortie": 1477781226910912563,
             "smol": 1477781211622539326,
-            "explode": 1477803664407003340
+            "explode": 1477803664407003340,
+            "tall": 1478069476284039180
         },
 
         "seperators_test": {
@@ -47,9 +48,24 @@ class ServerInfo():
             "cute": 1477749083404767364,
             "shortie": 1477749159997214863,
             "smol": 1477749196366020780,
-            "explode": 1478033086196482241
+            "explode": 1478033086196482241,
+            "tall": 1478069476284039180
         }
     }
+
+    ignore_radar_ids = {
+        "cute": [
+            1262124659814695005,
+            1450968328821670040
+        ],
+        "gay": [
+            1000478105128947773
+        ]
+    }
+
+    forced_radar_ids = [
+        1257541858809217035
+    ]
 
 class DiscordBot(AutoShardedBot):
     def __init__(self, config: Config, prefix: list[str] = None, *args, **kwargs):

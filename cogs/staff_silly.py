@@ -43,6 +43,14 @@ class StaffSilly(commands.Cog):
     #         return
 
     @commands.command()
+    async def tallinate(self, ctx: CustomContext, user: discord.Member = None):
+        if not permissions.can_run_staff_cmd(ctx.author):
+            await ctx.reply("You don't have permission to use that command.")
+            return
+        
+        await SemiFunc.pikes_inator(self, ctx, user, "tall", "give")
+
+    @commands.command()
     async def uncutinate(self, ctx: CustomContext, user: discord.Member = None):
         if not permissions.can_run_staff_cmd(ctx.author):
             await ctx.reply("You don't have permission to use that command.")
@@ -58,6 +66,12 @@ class StaffSilly(commands.Cog):
         
         await SemiFunc.pikes_inator(self, ctx, user, "smol", "remove")
         
+    # @commands.command()
+    # async def unshortinate(self, ctx: CustomContext, user: discord.Member = None):
+    #     if not permissions.can_run_staff_cmd(ctx.author):
+    #         await ctx.reply("You don't have permission to use that command.")
+    #         return
+
     @commands.command()
     async def unexplode(self, ctx: CustomContext, user: discord.Member = None):
         if not permissions.can_run_staff_cmd(ctx.author):
@@ -66,11 +80,13 @@ class StaffSilly(commands.Cog):
         
         await SemiFunc.pikes_inator(self, ctx, user, "explode", "remove")
 
-    # @commands.command()
-    # async def unshortinate(self, ctx: CustomContext, user: discord.Member = None):
-    #     if not permissions.can_run_staff_cmd(ctx.author):
-    #         await ctx.reply("You don't have permission to use that command.")
-    #         return
+    @commands.command()
+    async def untallinate(self, ctx: CustomContext, user: discord.Member = None):
+        if not permissions.can_run_staff_cmd(ctx.author):
+            await ctx.reply("You don't have permission to use that command.")
+            return
+        
+        await SemiFunc.pikes_inator(self, ctx, user, "tall", "remove")
         
         
 async def setup(bot):
