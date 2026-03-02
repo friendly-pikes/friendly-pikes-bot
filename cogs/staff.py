@@ -5,11 +5,41 @@ from utils.default import CustomContext
 from utils import permissions, default, http
 from utils.data import DiscordBot
 
-from utils.data import permissions
+from utils import permissions
+from utils.channels import channels
 
 class Staff(commands.Cog):
     def __init__(self, bot):
         self.bot: DiscordBot = bot
+
+    @commands.command()
+    async def repeat(self, ctx: CustomContext, channelId: int, *, message: str):
+        # Staff commands channel only
+        if ctx.channel.id == channels["staff_commands"]:
+
+            if channelId == None:
+                await ctx.reply(f"Channel is needed.\nUsage: ?repeat channel_id long or short message")
+                return
+            
+            if message == None:
+                await ctx.reply(f"Message is needed.\nUsage: ?repeat channel_id long or short message")
+                return
+            
+            # We're good, so send message
+            try:
+                if ctx.guild.get_channel(channelId):
+                    channel = ctx.guild.get_channel(channelId)
+                    await channel.send(message)
+                    await ctx.send("Send message successfully!")
+                else:
+                    await ctx.reply(f"Cannot find a channel with the id '{channelId}'")
+            except Exception as e:
+                print("oh")
+                print(e)
+        else:
+            await ctx.message.delete()
+            # await ctx.reply("Wot?")
+
 
     # @commands.command()
     # async def verify(self, ctx: CustomContext, user: discord.Member = None):
