@@ -1,4 +1,5 @@
 import discord
+import random
 import os
 
 from utils import permissions, default
@@ -109,18 +110,28 @@ class DiscordBot(AutoShardedBot):
         if ctx.valid:
             await self.invoke(ctx)
         else:
-            ## PETITION BAN 67!!
+            ## Other stuff first, then ban stuff
+            content_lower = msg.content.lower()
+
+            # Cute denier
+            if "not cute" in content_lower or "nawt cute" in content_lower:
+                if random.randint(1, 100) == 100:
+                    msg.reply("Cute denier detected! They are undeniably cute.")
+
+
             if permissions.can_run_staff_cmd(msg.author) == False:
+                ## PETITION BAN 67!!
                 if "67" in msg.content or "6-7" in msg.content \
-                    or "six seven" in msg.content.lower():
+                    or "six seven" in content_lower:
 
                     await msg.reply("Banished term detected.")
                     await msg.delete()
                 
                 ## Ban talking about the dammy files
-                elif "dammy files" in msg.content.lower():
+                elif "dammy files" in content_lower:
                     await msg.reply("Please don't talk about that.")
                     await msg.delete()
+
         # await self.process_commands(msg)
 
 
