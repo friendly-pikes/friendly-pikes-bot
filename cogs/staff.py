@@ -13,7 +13,7 @@ class Staff(commands.Cog):
 
     # @commands.command()
     # async def verify(self, ctx: CustomContext, user: discord.Member = None):
-    #     if not permissions.can_run_staff_cmd(user):
+    #     if not permissions.can_run_staff_cmd(ctx.author):
     #         await ctx.reply("You don't have permission to use that command.")
     #         return
         
@@ -27,7 +27,7 @@ class Staff(commands.Cog):
 
     @commands.command()
     async def banish(self, ctx: CustomContext, user: discord.Member = None):
-        if not permissions.can_run_staff_cmd(user):
+        if not permissions.can_run_staff_cmd(ctx.author):
             await ctx.reply("You don't have permission to use that command.")
             return
         
@@ -44,20 +44,20 @@ class Staff(commands.Cog):
                 await ctx.reply("Cannot banish a staff member.")
             else:
                 if role in user.roles:
-                    await user.remove_roles(role)
+                    await user.remove_roles(role, reason=f"They've been unbanished by {ctx.author.global_name}")
                     await ctx.reply(f"{user.mention} has been unbanished")
                 else:
                     verifiedRole = user.guild.get_role(1477494681959923743)
                     
                     await user.remove_roles(verifiedRole)
-                    await user.add_roles(role)
+                    await user.add_roles(role, reason=f"They've been banished by {ctx.author.global_name}")
                     await ctx.reply(f"{user.mention} has been banished!")
         else:
             await ctx.reply("Cannot banish noone!\nCommand usage:?banish @user")
 
     @commands.command()
     async def unbanish(self, ctx: CustomContext, user: discord.Member = None):
-        if not permissions.can_run_staff_cmd(user):
+        if not permissions.can_run_staff_cmd(ctx.author):
             await ctx.reply("You don't have permission to use that command.")
             return
 
@@ -74,7 +74,7 @@ class Staff(commands.Cog):
                 await ctx.reply("Cannot banish or unbanish a staff member.")
             else:
                 if role in user.roles:
-                    await user.remove_roles(role)
+                    await user.remove_roles(role, reason=f"They've been unbanished by {ctx.author.global_name}")
                     await ctx.reply(f"{user.mention} has been unbanished")
         else:
             await ctx.reply("Cannot banish noone!\nCommand usage:?unbanish @user")

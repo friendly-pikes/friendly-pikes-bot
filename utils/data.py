@@ -8,12 +8,14 @@ from discord.ext.commands import AutoShardedBot, DefaultHelpCommand
 
 banishUserIds = [
     1403877222959419423, # Test
-    # 825309596784001024 # FreddyCR  (just in case..)
     495293024394543124, # FoxyOwo
     626154564202266636, # Dammy
     1070256519897161749, # Danny
-    1262934126844182633, # Rubicon
-    400045916762931203 # Archie
+    1262934126844182633 # Rubicon
+
+    ## These are innont plp
+    # 825309596784001024 # FreddyCR
+    # 400045916762931203 # Archie
 ]
 
 
