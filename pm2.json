@@ -1,8 +1,0 @@
-{
-  "apps": [{
-    "name": "discord_bot.py",
-    "script": "index.py",
-    "interpreter": "python",
-    "interpreter_args": "-u"
-  }]
-}
