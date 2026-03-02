@@ -13,11 +13,43 @@ banishUserIds = [
     1070256519897161749, # Danny
     1262934126844182633 # Rubicon
 
-    ## These are innont plp
+    ## These are innonent plp
     # 825309596784001024 # FreddyCR
     # 400045916762931203 # Archie
 ]
 
+class ServerInfo():
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    
+    server_ids = [
+        #Main
+        1414222707570118656,
+        # Test
+        1438414082448425111
+    ]
+
+    role_ids = {
+        "seperators": {
+            "vanity": 1477780961935491226
+        },
+        "roles": {
+            "cute": 1477781229599199434,
+            "shortie": 1477781226910912563,
+            "smol": 1477781211622539326,
+            "explode": 1477803664407003340
+        },
+
+        "seperators_test": {
+            "vanity": 1478032301685211298
+        },
+        "roles_test": {
+            "cute": 1477749083404767364,
+            "shortie": 1477749159997214863,
+            "smol": 1477749196366020780,
+            "explode": 1478033086196482241
+        }
+    }
 
 class DiscordBot(AutoShardedBot):
     def __init__(self, config: Config, prefix: list[str] = None, *args, **kwargs):
@@ -36,12 +68,10 @@ class DiscordBot(AutoShardedBot):
 
         return embed
     
-    """When the bot connects"""
     async def on_connect(self):
         # You gotta be hidden!
         await self.change_presence(status=discord.Status.invisible)
 
-    """When the bot is ready"""
     async def on_ready(self):
         print(f"\nLogged in as {self.user.name}")
         await self.change_presence(status=discord.Status.invisible)
@@ -84,7 +114,6 @@ class DiscordBot(AutoShardedBot):
             await member.add_roles(role)
             await channel.send(embed=embed)
 
-        
     async def process_commands(self, msg):
         ctx = await self.get_context(msg, cls=default.CustomContext)
         await self.invoke(ctx)

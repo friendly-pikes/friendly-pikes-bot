@@ -30,12 +30,11 @@ class Staff(commands.Cog):
                 if ctx.guild.get_channel(channelId):
                     channel = ctx.guild.get_channel(channelId)
                     await channel.send(message)
-                    await ctx.send("Send message successfully!")
+                    await ctx.reply("Send message successfully!")
                 else:
                     await ctx.reply(f"Cannot find a channel with the id '{channelId}'")
             except Exception as e:
-                print("oh")
-                print(e)
+                print(f"Got Exception in repeat staff command:\n{e}")
         else:
             await ctx.message.delete()
             # await ctx.reply("Wot?")

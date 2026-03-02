@@ -6,10 +6,7 @@ from utils import permissions, default, http
 from utils.data import DiscordBot
 
 from utils.data import permissions
-
-# 1477749083404767364 - Test cute role
-# 1477749159997214863 - Test shortie role
-# 1477749196366020780 - Test smol role
+from utils.semifunc import SemiFunc
 
 class StaffSilly(commands.Cog):
     def __init__(self, bot):
@@ -21,23 +18,7 @@ class StaffSilly(commands.Cog):
             await ctx.reply("You don't have permission to use that command.")
             return
         
-        ## Testy Test
-        roleId = 1477803664407003340
-
-        if ctx.guild.id == 1438414082448425111:
-            roleId = 1477749083404767364
-        
-        # We need a user to cutinate god damn it!
-        # (checking if user was given with command)
-        if user != None:
-            role = ctx.guild.get_role(roleId)
-
-            if role in user.roles:
-                await user.remove_roles(role, reason="They unexploded")
-                await ctx.reply(f"{user.mention} has unexploded.. how.")
-            else:
-                await user.add_roles(role, reason="They exploded")
-                await ctx.reply(f"https://tenor.com/view/cat-explosion-sad-explode-gif-15295996165959499721")
+        await SemiFunc.pikes_inator(self, ctx, user, "explode", "give")
 
     @commands.command()
     async def cutinate(self, ctx: CustomContext, user: discord.Member = None):
@@ -45,23 +26,7 @@ class StaffSilly(commands.Cog):
             await ctx.reply("You don't have permission to use that command.")
             return
         
-        ## Testy Test
-        roleId = 1477781229599199434
-
-        if ctx.guild.id == 1438414082448425111:
-            roleId = 1477749083404767364
-        
-        # We need a user to cutinate god damn it!
-        # (checking if user was given with command)
-        if user != None:
-            role = ctx.guild.get_role(roleId)
-
-            if role in user.roles:
-                await user.remove_roles(role, reason="They've been released from the cutinator")
-                await ctx.reply(f"{user.mention} has been released from the cutinator!")
-            else:
-                await user.add_roles(role, reason="They invoked the cutinator")
-                await ctx.reply(f"{user.mention} has invoked of the wrath of the cutinator!")
+        await SemiFunc.pikes_inator(self, ctx, user, "cute", "give")
 
     @commands.command()
     async def smolinate(self, ctx: CustomContext, user: discord.Member = None):
@@ -69,47 +34,13 @@ class StaffSilly(commands.Cog):
             await ctx.reply("You don't have permission to use that command.")
             return
         
-        ## Testy Test
-        roleId = 1477781211622539326
-
-        if ctx.guild.id == 1438414082448425111:
-            roleId = 1477749196366020780
-        
-        # We need a user to cutinate god damn it!
-        # (checking if user was given with command)
-        if user != None:
-            role = ctx.guild.get_role(roleId)
-
-            if role in user.roles:
-                await user.remove_roles(role, reason="They've been released from the smolinator.")
-                await ctx.reply(f"{user.mention} has been released from the smolinator!")
-            else:
-                await user.add_roles(role, reason="They invoked the smolinator.")
-                await ctx.reply(f"{user.mention} has invoked of the wrath of the smolinator!")
+        await SemiFunc.pikes_inator(self, ctx, user, "smol", "give")
          
     # @commands.command()
     # async def shortinate(self, ctx: CustomContext, user: discord.Member = None):
     #     if not permissions.can_run_staff_cmd(ctx.author):
     #         await ctx.reply("You don't have permission to use that command.")
     #         return
-        
-    #     ## Testy Test
-    #     roleId = 1477781226910912563
-
-    #     if ctx.guild.id == 1438414082448425111:
-    #         roleId = 1477749196366020780
-        
-    #     # We need a user to cutinate god damn it!
-    #     # (checking if user was given with command)
-    #     if user != None:
-    #         role = ctx.guild.get_role(roleId)
-
-    #         if role in user.roles:
-    #             await user.remove_roles(role, reason="They've been released from the shortinator")
-    #             await ctx.reply(f"{user.mention} has been released from the shortinator!")
-    #         else:
-    #             await user.add_roles(role, reason="They've invoked the shortinator")
-    #             await ctx.reply(f"{user.mention} has invoked of the wrath of the shortinator!")
 
     @commands.command()
     async def uncutinate(self, ctx: CustomContext, user: discord.Member = None):
@@ -117,20 +48,7 @@ class StaffSilly(commands.Cog):
             await ctx.reply("You don't have permission to use that command.")
             return
         
-        ## Testy Test
-        roleId = 1477781229599199434
-
-        if ctx.guild.id == 1438414082448425111:
-            roleId = 1477749083404767364
-        
-        # We need a user to cutinate god damn it!
-        # (checking if user was given with command)
-        if user != None:
-            role = ctx.guild.get_role(roleId)
-
-            if role in user.roles:
-                await user.remove_roles(role, reason="They've been released from the cutinator")
-                await ctx.reply(f"{user.mention} has been released from the cutinator!")
+        await SemiFunc.pikes_inator(self, ctx, user, "cute", "remove")
 
     @commands.command()
     async def unsmolinate(self, ctx: CustomContext, user: discord.Member = None):
@@ -138,41 +56,22 @@ class StaffSilly(commands.Cog):
             await ctx.reply("You don't have permission to use that command.")
             return
         
-        ## Testy Test
-        roleId = 1477781211622539326
-
-        if ctx.guild.id == 1438414082448425111:
-            roleId = 1477749196366020780
+        await SemiFunc.pikes_inator(self, ctx, user, "smol", "remove")
         
-        # We need a user to cutinate god damn it!
-        # (checking if user was given with command)
-        if user != None:
-            role = ctx.guild.get_role(roleId)
-
-            if role in user.roles:
-                await user.remove_roles(role, reason="They've been released from the smolinator")
-                await ctx.reply(f"{user.mention} has been released from the smolinator!")
+    @commands.command()
+    async def unexplode(self, ctx: CustomContext, user: discord.Member = None):
+        if not permissions.can_run_staff_cmd(ctx.author):
+            await ctx.reply("You don't have permission to use that command.")
+            return
         
+        await SemiFunc.pikes_inator(self, ctx, user, "explode", "remove")
+
     # @commands.command()
     # async def unshortinate(self, ctx: CustomContext, user: discord.Member = None):
     #     if not permissions.can_run_staff_cmd(ctx.author):
     #         await ctx.reply("You don't have permission to use that command.")
     #         return
         
-    #     ## Testy Test
-    #     roleId = 1477781226910912563
-
-    #     if ctx.guild.id == 1438414082448425111:
-    #         roleId = 1477749196366020780
-        
-    #     # We need a user to cutinate god damn it!
-    #     # (checking if user was given with command)
-    #     if user != None:
-    #         role = ctx.guild.get_role(roleId)
-
-    #         if role in user.roles:
-    #             await user.remove_roles(role, reason="They've been released from the shortinator")
-    #             await ctx.reply(f"{user.mention} has been released from the shortinator!")
         
 async def setup(bot):
     await bot.add_cog(StaffSilly(bot))

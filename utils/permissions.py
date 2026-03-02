@@ -25,6 +25,7 @@ def can_run_staff_cmd(user: discord.Member):
         
     return False
 
+
 def is_owner(ctx: "CustomContext") -> bool:
     """ Checks if the author is one of the owners """
     if ctx.author.id == ctx.bot.config.discord_owner_id:
