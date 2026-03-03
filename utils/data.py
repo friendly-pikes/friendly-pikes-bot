@@ -63,7 +63,7 @@ class DiscordBot(AutoShardedBot):
         else:
             ## Other stuff first, then ban stuff
             content_lower = msg.content.lower()
-            content_lower_final = re.sub(r'[-_\\/^,.]', '', content_lower).replace(" ", "")
+            content_lower_final = re.sub(r'[(#@-_\\/^,.)]', '', content_lower).replace(" ", "")
             
             banished = SemiFunc.get_banished()
             banishedIgnore = banished["banishedWordsBypasses"]
@@ -73,42 +73,45 @@ class DiscordBot(AutoShardedBot):
                 if random.randint(1, 100) > 80:
                     await msg.reply("Cute denier detected! They are undeniably cute.")
 
-            if permissions.can_run_staff_cmd(msg.author) == False:
-                for banished_thing in banished["banished_words"]:
-                    if content_lower_final.find(banished_thing) >= 0:
-                        if content_lower_final in banishedIgnore:
-                            print(f"Don't banish '{content_lower}' sent by {msg.author.name}")
-                        else:
-                            embed = self.create_embed("Banished Words", "Placeholder", discord.Color.red())
-                            
-                            await SemiFunc.banish_word(self, embed, msg, ctx, msg.content, banished_thing, banished["banished_words"][banished_thing])
-                ## Private
-                for banished_thing in banished_words_private.private_banished():
-                    if content_lower_final.find(banished_thing) >= 0:
-                        if content_lower_final in banishedIgnore:
-                            print(f"Don't banish '{content_lower}' sent by {msg.author.name}")
-                        else:
-                            embed = self.create_embed("Banished Words", "Placeholder", discord.Color.red())
-                            
-                            await SemiFunc.banish_word(self, embed, msg, ctx, msg.content, banished_thing, banished["banished_words"][banished_thing])
+            # TEMP
+            if msg.guild.id == 1438414082448425111:
+                if permissions.can_run_staff_cmd(msg.author) == False:
+                    for banished_thing in banished["banished_words"]:
+                        if content_lower_final.find(banished_thing) >= 0:
+                            print(content_lower_final)
+                            if content_lower_final in banishedIgnore:
+                                print(f"Don't banish '{content_lower}' sent by {msg.author.name}")
+                            else:
+                                embed = self.create_embed("Banished Words", "Placeholder", discord.Color.red())
+                                
+                                await SemiFunc.banish_word(self, embed, msg, ctx, msg.content, banished_thing, banished["banished_words"][banished_thing])
+                    ## Private
+                    for banished_thing in banished_words_private.private_banished():
+                        if content_lower_final.find(banished_thing) >= 0:
+                            if content_lower_final in banishedIgnore:
+                                print(f"Don't banish '{content_lower}' sent by {msg.author.name}")
+                            else:
+                                embed = self.create_embed("Banished Words", "Placeholder", discord.Color.red())
+                                
+                                await SemiFunc.banish_word(self, embed, msg, ctx, msg.content, banished_thing, banished["banished_words"][banished_thing])
 
-            # Banish users from things
-            if msg.author.id == 888072934114074624 or msg.author.id == 1257541858809217035 or msg.author.id == 1094359688541372457 or msg.author.id == 1403877222959419423:
-                pawMsg = "You've been banished from using snowy's paws."
-                if msg.author.id == 888072934114074624:
-                    pawMsg = "You've been banished from using your paws."
+                # Banish users from things
+                if msg.author.id == 888072934114074624 or msg.author.id == 1257541858809217035 or msg.author.id == 1094359688541372457 or msg.author.id == 1403877222959419423:
+                    pawMsg = "You've been banished from using snowy's paws."
+                    if msg.author.id == 888072934114074624:
+                        pawMsg = "You've been banished from using your paws."
 
 
-                # First snowy. and only snowy for now
-                if content_lower.find("<:snowypawbs:1468047084664918278>") == 0:
-                    await msg.reply(pawMsg)
-                    await msg.delete()
-                if msg.stickers:
-                    if msg.stickers[0]:
-                            
-                        if msg.stickers[0].name == "Snowy Pawbs" or msg.stickers[0].name == "Snowy Pawbs Real":
-                            await msg.reply(pawMsg)
-                            await msg.delete()
+                    # First snowy. and only snowy for now
+                    if content_lower.find("<:snowypawbs:1468047084664918278>") == 0:
+                        await msg.reply(pawMsg)
+                        await msg.delete()
+                    if msg.stickers:
+                        if msg.stickers[0]:
+                                
+                            if msg.stickers[0].name == "Snowy Pawbs" or msg.stickers[0].name == "Snowy Pawbs Real":
+                                await msg.reply(pawMsg)
+                                await msg.delete()
 
     async def on_member_join(self, member):
         test_or_main = ServerInfo.main_or_test_server(ServerInfo, member)
