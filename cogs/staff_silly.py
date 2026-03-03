@@ -18,7 +18,7 @@ class StaffSilly(commands.Cog):
             await ctx.reply("You don't have permission to use that command.")
             return
         
-        await SemiFunc.pikes_inator(self, ctx, user, "explode", "give")
+        await SemiFunc.pikes_inator(ctx, user, "explode", "give")
 
     @commands.command()
     async def cutinate(self, ctx: CustomContext, user: discord.Member = None):
@@ -26,7 +26,7 @@ class StaffSilly(commands.Cog):
             await ctx.reply("You don't have permission to use that command.")
             return
         
-        await SemiFunc.pikes_inator(self, ctx, user, "cute", "give")
+        await SemiFunc.pikes_inator(ctx, user, "cute", "give")
 
     @commands.command()
     async def smolinate(self, ctx: CustomContext, user: discord.Member = None):
@@ -34,7 +34,7 @@ class StaffSilly(commands.Cog):
             await ctx.reply("You don't have permission to use that command.")
             return
         
-        await SemiFunc.pikes_inator(self, ctx, user, "smol", "give")
+        await SemiFunc.pikes_inator(ctx, user, "smol", "give")
          
     # @commands.command()
     # async def shortinate(self, ctx: CustomContext, user: discord.Member = None):
@@ -48,7 +48,7 @@ class StaffSilly(commands.Cog):
             await ctx.reply("You don't have permission to use that command.")
             return
         
-        await SemiFunc.pikes_inator(self, ctx, user, "tall", "give")
+        await SemiFunc.pikes_inator(ctx, user, "tall", "give")
 
     @commands.command()
     async def uncutinate(self, ctx: CustomContext, user: discord.Member = None):
@@ -56,7 +56,7 @@ class StaffSilly(commands.Cog):
             await ctx.reply("You don't have permission to use that command.")
             return
         
-        await SemiFunc.pikes_inator(self, ctx, user, "cute", "remove")
+        await SemiFunc.pikes_inator(ctx, user, "cute", "remove")
 
     @commands.command()
     async def unsmolinate(self, ctx: CustomContext, user: discord.Member = None):
@@ -64,7 +64,7 @@ class StaffSilly(commands.Cog):
             await ctx.reply("You don't have permission to use that command.")
             return
         
-        await SemiFunc.pikes_inator(self, ctx, user, "smol", "remove")
+        await SemiFunc.pikes_inator(ctx, user, "smol", "remove")
         
     # @commands.command()
     # async def unshortinate(self, ctx: CustomContext, user: discord.Member = None):
@@ -78,7 +78,7 @@ class StaffSilly(commands.Cog):
             await ctx.reply("You don't have permission to use that command.")
             return
         
-        await SemiFunc.pikes_inator(self, ctx, user, "explode", "remove")
+        await SemiFunc.pikes_inator(ctx, user, "explode", "remove")
 
     @commands.command()
     async def untallinate(self, ctx: CustomContext, user: discord.Member = None):
@@ -86,7 +86,7 @@ class StaffSilly(commands.Cog):
             await ctx.reply("You don't have permission to use that command.")
             return
         
-        await SemiFunc.pikes_inator(self, ctx, user, "tall", "remove")
+        await SemiFunc.pikes_inator(ctx, user, "tall", "remove")
         
         
 async def setup(bot):

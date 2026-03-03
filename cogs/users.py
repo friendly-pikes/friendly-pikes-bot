@@ -19,7 +19,7 @@ class Users(commands.Cog):
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")
             else:
-                embed = await SemiFunc.pikes_radar(self, user, "cute")
+                embed = await SemiFunc.pikes_radar(user, "cute")
                 await ctx.reply(embed=embed)
         else:
             await ctx.reply("Can't use cutedar on noone!\nUsage: ?cutedar @user")
@@ -32,7 +32,7 @@ class Users(commands.Cog):
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")
             else:
-                embed = await SemiFunc.pikes_radar(self, user, "bi")
+                embed = await SemiFunc.pikes_radar(user, "bi")
                 await ctx.reply(embed=embed)
         else:
             await ctx.reply("Can't use bidar on noone!\nUsage: ?bidar @user")
@@ -43,7 +43,7 @@ class Users(commands.Cog):
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")
             else:
-                embed = await SemiFunc.pikes_radar(self, user, "gay")
+                embed = await SemiFunc.pikes_radar(user, "gay")
                 await ctx.reply(embed=embed)
         else:
             await ctx.reply("Can't use gaydar on noone!\nUsage: ?gaydar @user")
@@ -54,7 +54,7 @@ class Users(commands.Cog):
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")
             else:
-                embed = await SemiFunc.pikes_radar(self, user, "queer")
+                embed = await SemiFunc.pikes_radar(user, "queer")
                 await ctx.reply(embed=embed)
         else:
             await ctx.reply("Can't use queerdar on noone!\nUsage: ?queerdar @user")
@@ -65,7 +65,7 @@ class Users(commands.Cog):
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")
             else:
-                embed = await SemiFunc.pikes_radar(self, user, "rizz")
+                embed = await SemiFunc.pikes_radar(user, "rizz")
                 await ctx.reply(embed=embed)
         else:
             await ctx.reply("Can't use rizzdar on noone!\nUsage: ?rizzdar @user")
@@ -76,7 +76,7 @@ class Users(commands.Cog):
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")
             else:
-                embed = await SemiFunc.pikes_radar(self, user, "trans")
+                embed = await SemiFunc.pikes_radar(user, "trans")
                 await ctx.reply(embed=embed)
         else:
             await ctx.reply("Can't use transdar on noone!\nUsage: ?transdar @user")

@@ -3,7 +3,8 @@ import discord
 from discord.ext import commands
 from utils.default import CustomContext
 from utils import permissions, default, http
-from utils.data import DiscordBot, ServerInfo
+from utils.data import DiscordBot
+from utils.serverinfo import ServerInfo
 
 class Staff(commands.Cog):
     def __init__(self, bot):

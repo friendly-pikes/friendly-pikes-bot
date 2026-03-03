@@ -1,4 +1,18 @@
 {
+    "banished_ids": [
+        1403877222959419423,
+        495293024394543124,
+        626154564202266636,
+        1070256519897161749,
+        1448150720712015912
+
+    ],
+    "banishedWordsBypasses": [
+        "cdndiscordapp",
+        "tenorcom",
+        
+        "fwop"
+    ],
     "banished_words": {
         "blayze": "We don't talk about him anymore.",
 

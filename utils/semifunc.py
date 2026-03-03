@@ -1,10 +1,11 @@
 import asyncio
 import discord
 import random
+import json
 
-from utils.data import DiscordBot
+# from utils.data import DiscordBot
 from utils.default import CustomContext
-from utils.data import ServerInfo
+from utils.serverinfo import ServerInfo
 
 channel_ids = ServerInfo.channels
 server_ids = ServerInfo.server_ids
@@ -20,11 +21,57 @@ def get_inator_text(inator_type: str):
 
 class SemiFunc():
     def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
+
+    def get_banished():
+        exec_dir = __file__.replace(r"\utils\semifunc.py", "")
+        banished_json = None
+        with open(f"{exec_dir}\\misc\\banished.json") as banished_raw:
+            banished_json = json.loads(banished_raw.read())
+
+        return banished_json
     
-    async def pikes_radar(self, bot, user: discord.Member, radar: str):
+    async def banish_word(bot, embed, msg: discord.Message, ctx, content, banished_word, banish_message):
+        try:
+            print(f"banish '{content}' sent by {ctx.author.name}")
+
+            test_or_main = ServerInfo.main_or_test_server(ServerInfo, ctx)
+            auditChannel = msg.guild.get_channel(ServerInfo.channels[test_or_main]["audit"])
+            
+            description = f"**Message sent by {ctx.author.mention} in {ctx.channel.mention} was banished**"
+            description = f"{description}\n\nMessage: {msg.content}"
+            description = f"{description}\nDetected banished word: {banished_word}"
+            description = f"{description}\nMessage ID: {msg.id}"
+
+            await msg.reply(banish_message)
+            await msg.delete()
+
+            # Send a message to banish to let staff know that message was banished
+            if auditChannel:
+                embed.description = description
+
+                await auditChannel.send(embed=embed)
+            else:
+                print(f"Cannot find audit channel!\n{description}")
+
+            #                 if auditChannel:
+            #                     des = f"**Message sent by {ctx.author.mention} in {ctx.channel.mention} was banished**"
+            #                     des = f"{des}\n\nMessage: {msg.content}"
+            #                     des = f"{des}\nDetected banished word: {banished_thing}"
+            #                     des = f"{des}\nMessage ID: {msg.id}"
+
+            #                     embed = self.create_embed("Banished Words", des, discord.Color.red())
+
+            #                     await auditChannel.send(embed=embed)
+            #                 else:
+            #                     print(f"Cannot find audit channel!\n\n{des}")
+        except Exception as e:
+            await msg.channel.send("An error occurred, let <@888072934114074624> know!")
+            print(f"An error occurred\n{e}")
+
+    async def pikes_radar(bot, user: discord.Member, radar: str):
         percent = random.randint(1, 100)
-        embed = DiscordBot.create_embed(bot, "", "", discord.Color.pink())
+        embed = bot.create_embed(bot, "", "", discord.Color.pink())
 
         if percent == 67:
             if random.randint(1, 2) == 1:
@@ -64,7 +111,7 @@ class SemiFunc():
 
         return embed
 
-    async def pikes_inator(self, bot, ctx: CustomContext, user: discord.Member, inator_type:str, do_what: str):
+    async def pikes_inator(bot, ctx: CustomContext, user: discord.Member, inator_type:str, do_what: str):
         vanity_role_sep = 0
         role = 0
         idsPre = ServerInfo.main_or_test_server(ctx)

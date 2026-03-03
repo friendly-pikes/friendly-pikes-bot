@@ -9,135 +9,17 @@ from utils.default import CustomContext
 from utils.config import Config
 from discord.ext.commands import AutoShardedBot, DefaultHelpCommand
 
-banishUserIds = [
-    1403877222959419423, # Test
-    495293024394543124, # FoxyOwo
-    626154564202266636, # Dammy
-    1070256519897161749, # Danny
-    1448150720712015912 # Milo
-
-    ## These are innonent plp
-    # 825309596784001024 # FreddyCR
-    # 400045916762931203 # Archie
-    # 1262934126844182633 # Rubicon
-    # 264581569094615040, # Mathew
-]
-
-class ServerInfo():
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-    
-    def main_or_test_server(self, ctx: CustomContext):
-        if ctx.guild.id == self.server_ids["test"]:
-            return "test"
-        return "main"
-    
-    server_ids = {
-        "main": 1414222707570118656,
-        "test": 1438414082448425111
-    }
-    
-    channels = {
-        "main": {
-            "staff_commands": 1477520001165430938,
-            "audit": 1477498994082185350,
-        },
-        "test": {
-            "staff_commands": 1478352488301072477,
-            "audit": 1478387549662875689
-        }
-    }
-
-    role_ids = {
-        "seperators": {
-            "main": {
-                "vanity": 1477780961935491226
-            },
-            "test": {
-                "vanity": 1478032301685211298
-            }
-        },
-        "roles": {
-            "main": {
-                "cute": 1477781229599199434,
-                "shortie": 1477781226910912563,
-                "smol": 1477781211622539326,
-                "explode": 1477803664407003340,
-                "tall": 1478069476284039180
-            },
-            "test": {
-                "cute": 1477749083404767364,
-                "shortie": 1477749159997214863,
-                "smol": 1477749196366020780,
-                "explode": 1478033086196482241,
-                "tall": 1478069476284039180
-            }
-        },
-    }
-
-    ignore_radar_ids = {
-        "cute": [
-            1262124659814695005, # Victor / Pixie / Pivor or whatever
-            1450968328821670040 # TKO
-        ],
-        "gay": [
-            1000478105128947773, # 𝐳𝐦𝐢ę𝐤ł𝐲 𝐛𝐢𝐬𝐳𝐤𝐨𝐩
-            1449593053492023467 # Kooddoger
-        ]
-    }
-
-    forced_radar_ids = [
-        1257541858809217035
-    ]
+from misc import banished_words_private
+from utils.semifunc import SemiFunc
+from utils.serverinfo import ServerInfo
 
 class DiscordBot(AutoShardedBot):
     def __init__(self, config: Config, prefix: list[str] = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.prefix = prefix
         self.config = config
+        self.create_embed = self.create_embed
 
-    banishedWords = {
-        "blayze": "We don't talk about him anymore.",
-
-        # 67 banish
-        "6or7": 'Do not say that "meme" number.',
-        "sixhundredandseven": 'Do not say that "meme" number.',
-        "sixtyseven": 'Do not say that "meme" number.',
-        "67": 'Do not say that "meme" number.',
-
-        "goon": "Please don't use that term.",
-
-        "fetish": "Do not talk about anything of the sorts.",
-
-        # Furry Wonderland banish
-        
-        "sneppy": "Please don't talk about Dammy / Sneppy.",
-        "sneppyowo": "Please don't talk about Dammy / Sneppy.",
-        "dammy": "Please don't talk about Dammy.",
-        "dammyfiles": "Please don't talk about that.",
-        "damianbednarski79": "Please don't talk about Dammy.",
-        
-        "foxyowo": "Please don't talk about FoxyOWO.",
-        "danny": "Please don't talk abbout Danny.",
-
-        ## [REDACTED] remove for Github Repo, as it's personal info
-
-
-        "fw": "Please don't talk about Furry Wonderland.",
-        "furrywonderland": "Please don't talk about Furry Wonderland.",
-                # ## Ban talking about the dammy files
-                # elif "dammy files" in content_lower:
-                #     await msg.reply("Please don't talk about that.")
-                #     await msg.delete()
-    }
-
-    # Allow these to be said
-    banishedWordsBypasses = [
-        ## Gifs and stuff
-        "cdndiscordapp", # cdn.discord.app
-        "tenorcom", # tenor.com
-        "fwop"
-    ]
 
     def create_embed(self, title, description, color):
         embed = discord.Embed(
@@ -183,47 +65,33 @@ class DiscordBot(AutoShardedBot):
             content_lower = msg.content.lower()
             content_lower_final = re.sub(r'[-_\\/^,.]', '', content_lower).replace(" ", "")
             
+            banished = SemiFunc.get_banished()
+            banishedIgnore = banished["banishedWordsBypasses"]
+
             # Cute denier
             if "not cute" in content_lower or "nawt cute" in content_lower:
                 if random.randint(1, 100) > 80:
                     await msg.reply("Cute denier detected! They are undeniably cute.")
 
-
             if permissions.can_run_staff_cmd(msg.author) == False:
-                for banished_thing in self.banishedWords:
-                    # print(banished_thing)
-                    # print(content_lower.find(banished_thing))
-
+                for banished_thing in banished["banished_words"]:
                     if content_lower_final.find(banished_thing) >= 0:
-                        if content_lower_final in self.banishedWordsBypasses:
-                            print(f"Don't banish '{content_lower}' sent by {ctx.author.name}")
+                        if content_lower_final in banishedIgnore:
+                            print(f"Don't banish '{content_lower}' sent by {msg.author.name}")
                         else:
-                            try:
-                                print(f"banish '{content_lower}' sent by {ctx.author.name}")
-                                message = self.banishedWords[banished_thing]
+                            embed = self.create_embed("Banished Words", "Placeholder", discord.Color.red())
+                            
+                            await SemiFunc.banish_word(self, embed, msg, ctx, msg.content, banished_thing, banished["banished_words"][banished_thing])
+                ## Private
+                for banished_thing in banished_words_private.private_banished():
+                    if content_lower_final.find(banished_thing) >= 0:
+                        if content_lower_final in banishedIgnore:
+                            print(f"Don't banish '{content_lower}' sent by {msg.author.name}")
+                        else:
+                            embed = self.create_embed("Banished Words", "Placeholder", discord.Color.red())
+                            
+                            await SemiFunc.banish_word(self, embed, msg, ctx, msg.content, banished_thing, banished["banished_words"][banished_thing])
 
-                                await msg.reply(message)
-                                await msg.delete()
-
-                                # Send a message to banish to let staff know that message was banished
-                                test_or_main = ServerInfo.main_or_test_server(ServerInfo, ctx)
-                                auditChannel = msg.guild.get_channel(ServerInfo.channels[test_or_main]["audit"])
-
-                                if auditChannel:
-                                    des = f"**Message sent by {ctx.author.mention} in {ctx.channel.mention} was banished**"
-                                    des = f"{des}\n\nMessage: {msg.content}"
-                                    des = f"{des}\nDetected banished word: {banished_thing}"
-                                    des = f"{des}\nMessage ID: {msg.id}"
-
-                                    embed = self.create_embed("Banished Words", des, discord.Color.red())
-
-                                    await auditChannel.send(embed=embed)
-                                else:
-                                    print(f"Cannot find audit channel!\n\n{des}")
-                            except Exception as e:
-                                await msg.channel.send("An error occurred, let <@888072934114074624> know!")
-                                print(f"An error occurred\n{e}")
-            
             # Banish users from things
             if msg.author.id == 888072934114074624 or msg.author.id == 1257541858809217035 or msg.author.id == 1094359688541372457 or msg.author.id == 1403877222959419423:
                 pawMsg = "You've been banished from using snowy's paws."
@@ -242,14 +110,12 @@ class DiscordBot(AutoShardedBot):
                             await msg.reply(pawMsg)
                             await msg.delete()
 
-
-        # await self.process_commands(msg)
-
     async def on_member_join(self, member):
         roleId = 1477496210414768243
         channelId = 1418951533688655989
+        banishUserIds = SemiFunc.get_banished()["banished_ids"]
 
-        # Test
+        # Test Server
         if member.guild.id == 1438414082448425111:
             roleId = 1477575309476761672
             channelId = 1473069052128661545
