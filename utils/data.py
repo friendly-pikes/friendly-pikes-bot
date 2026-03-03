@@ -120,7 +120,7 @@ class DiscordBot(AutoShardedBot):
         "foxyowo": "Please don't talk about FoxyOWO.",
         "danny": "Please don't talk abbout Danny.",
 
-        ## [REDACTED] remove, as it's personal info
+        ## [REDACTED] remove for Github Repo, as it's personal info
 
 
         "fw": "Please don't talk about Furry Wonderland.",
@@ -226,20 +226,20 @@ class DiscordBot(AutoShardedBot):
             
             # Banish users from things
             if msg.author.id == 888072934114074624 or msg.author.id == 1257541858809217035 or msg.author.id == 1094359688541372457 or msg.author.id == 1403877222959419423:
+                pawMsg = "You've been banished from using snowy's paws."
+                if msg.author.id == 888072934114074624:
+                    pawMsg = "You've been banished from using your paws."
+
+
                 # First snowy. and only snowy for now
                 if content_lower.find("<:snowypawbs:1468047084664918278>") == 0:
-                    await msg.reply("You've been banished from using your paws.")
+                    await msg.reply(pawMsg)
                     await msg.delete()
                 if msg.stickers:
                     if msg.stickers[0]:
                             
                         if msg.stickers[0].name == "Snowy Pawbs" or msg.stickers[0].name == "Snowy Pawbs Real":
-                            messageB = "You've been banished from using your paws."
-
-                            if msg.author.id == 1257541858809217035 or msg.author.id == 1094359688541372457:
-                                messageB = "You've been banished from using snowy's paws."
-
-                            await msg.reply(messageB)
+                            await msg.reply(pawMsg)
                             await msg.delete()
 
 
