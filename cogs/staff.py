@@ -15,7 +15,7 @@ class Staff(commands.Cog):
     @commands.command()
     async def repeat(self, ctx: CustomContext, channelId: int, *, message: str):
         # Staff commands channel only
-        if ctx.channel.id == channels["staff_commands"]:
+        if ctx.channel.id == channels["staff_commands"] or ctx.channel.id == 1478352488301072477:
 
             if channelId == None:
                 await ctx.reply(f"Channel is needed.\nUsage: ?repeat channel_id long or short message")
@@ -32,7 +32,16 @@ class Staff(commands.Cog):
                     await channel.send(message)
                     await ctx.reply("Send message successfully!")
                 else:
-                    await ctx.reply(f"Cannot find a channel with the id '{channelId}'")
+                    good = False
+                    for guild in self.bot.guilds:
+                        if guild.get_channel(channelId):
+                            good = True
+                            channel = guild.get_channel(channelId)
+                            await channel.send(message)
+                            await ctx.reply("Send message successfully!")
+
+                    if good == False:
+                        await ctx.reply(f"Cannot find a channel with the id '{channelId}'")
             except Exception as e:
                 print(f"Got Exception in repeat staff command:\n{e}")
         else:

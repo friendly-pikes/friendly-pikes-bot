@@ -1,6 +1,7 @@
 import discord
 import random
 import os
+import re
 
 from utils import permissions, default
 from utils.config import Config
@@ -12,11 +13,13 @@ banishUserIds = [
     495293024394543124, # FoxyOwo
     626154564202266636, # Dammy
     1070256519897161749, # Danny
-    1262934126844182633 # Rubicon
+    264581569094615040, # Mathew
+    1448150720712015912 # Milo
 
     ## These are innonent plp
     # 825309596784001024 # FreddyCR
     # 400045916762931203 # Archie
+    # 1262934126844182633 # Rubicon
 ]
 
 class ServerInfo():
@@ -56,11 +59,12 @@ class ServerInfo():
 
     ignore_radar_ids = {
         "cute": [
-            1262124659814695005,
-            1450968328821670040
+            1262124659814695005, # Victor / Pixie / Pivor or whatever
+            1450968328821670040 # TKO
         ],
         "gay": [
-            1000478105128947773
+            1000478105128947773, # 𝐳𝐦𝐢ę𝐤ł𝐲 𝐛𝐢𝐬𝐳𝐤𝐨𝐩
+            1449593053492023467 # Kooddoger
         ]
     }
 
@@ -73,6 +77,49 @@ class DiscordBot(AutoShardedBot):
         super().__init__(*args, **kwargs)
         self.prefix = prefix
         self.config = config
+
+    banishedWords = {
+        "blayze": "We don't talk about him anymore.",
+
+        # 67 banish
+        "6or7": 'Do not say that "meme" number.',
+        "sixhundredandseven": 'Do not say that "meme" number.',
+        "sixtyseven": 'Do not say that "meme" number.',
+        "67": 'Do not say that "meme" number.',
+
+        "goon": "Please don't use that term.",
+
+        "fetish": "Do not talk about anything of the sorts.",
+
+        # Furry Wonderland banish
+        
+        "sneppy": "Please don't talk about Dammy / Sneppy.",
+        "sneppyowo": "Please don't talk about Dammy / Sneppy.",
+        "dammy": "Please don't talk about Dammy.",
+        "dammyfiles": "Please don't talk about that.",
+        "damianbednarski79": "Please don't talk about Dammy.",
+        
+        "foxyowo": "Please don't talk about FoxyOWO.",
+        "danny": "Please don't talk abbout Danny.",
+
+        ## [REDACTED] remove, as it's personal info
+
+
+        "fw": "Please don't talk about Furry Wonderland.",
+        "furrywonderland": "Please don't talk about Furry Wonderland.",
+                # ## Ban talking about the dammy files
+                # elif "dammy files" in content_lower:
+                #     await msg.reply("Please don't talk about that.")
+                #     await msg.delete()
+    }
+
+    # Allow these to be said
+    banishedWordsBypasses = [
+        ## Gifs and stuff
+        "cdndiscordapp", # cdn.discord.app
+        "tenorcom", # tenor.com
+        "fwop"
+    ]
 
     def create_embed(self, title, description, color):
         embed = discord.Embed(
@@ -105,32 +152,54 @@ class DiscordBot(AutoShardedBot):
         if not self.is_ready() or msg.author.bot or \
            not permissions.can_handle(msg, "send_messages"):
             return
-        
+        # print(msg.stickers)
         ctx = await self.get_context(msg, cls=default.CustomContext)
         if ctx.valid:
             await self.invoke(ctx)
         else:
             ## Other stuff first, then ban stuff
             content_lower = msg.content.lower()
-
+            content_lower_res = re.sub(r'[-_\\/^,.0-9]', '', content_lower)
+            content_lower_res = content_lower_res.replace(" ", "")
+            
             # Cute denier
             if "not cute" in content_lower or "nawt cute" in content_lower:
-                if random.randint(1, 100) == 100:
-                    msg.reply("Cute denier detected! They are undeniably cute.")
+                if random.randint(1, 100) > 80:
+                    await msg.reply("Cute denier detected! They are undeniably cute.")
 
 
             if permissions.can_run_staff_cmd(msg.author) == False:
-                ## PETITION BAN 67!!
-                if "67" in msg.content or "6-7" in msg.content \
-                    or "six seven" in content_lower:
+                for banished_thing in self.banishedWords:
+                    # print(banished_thing)
+                    # print(content_lower.find(banished_thing))
 
-                    await msg.reply("Banished term detected.")
+                    if content_lower.find(banished_thing) >= 0:
+                        if content_lower_res in self.banishedWordsBypasses:
+                            print(f"Don't banish {content_lower}")
+                        else:
+                            print(f"banish {content_lower}")
+                            message = self.banishedWords[banished_thing]
+                            await msg.reply(message)
+                            await msg.delete()
+            
+            # Banish users from things
+            if msg.author.id == 888072934114074624 or msg.author.id == 1257541858809217035 or msg.author.id == 1094359688541372457 or msg.author.id == 1403877222959419423:
+                # First snowy. and only snowy for now
+                if content_lower.find("<:snowypawbs:1468047084664918278>") == 0:
+                    await msg.reply("You've been banished from using your paws.")
                     await msg.delete()
-                
-                ## Ban talking about the dammy files
-                elif "dammy files" in content_lower:
-                    await msg.reply("Please don't talk about that.")
-                    await msg.delete()
+                if msg.stickers:
+                    if msg.stickers[0]:
+                            
+                        if msg.stickers[0].name == "Snowy Pawbs" or msg.stickers[0].name == "Snowy Pawbs Real":
+                            messageB = "You've been banished from using your paws."
+
+                            if msg.author.id == 1257541858809217035 or msg.author.id == 1094359688541372457:
+                                messageB = "You've been banished from using snowy's paws."
+
+                            await msg.reply(messageB)
+                            await msg.delete()
+
 
         # await self.process_commands(msg)
 
