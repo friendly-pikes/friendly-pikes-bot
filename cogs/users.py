@@ -12,17 +12,27 @@ class Users(commands.Cog):
     def __init__(self, bot):
         self.bot: DiscordBot = bot
 
-
     @commands.command()
     async def cutedar(self, ctx: CustomContext, user: discord.Member = None):
         if user:
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")
             else:
-                embed = await SemiFunc.pikes_radar(self, user, "cute")
+                embed = await SemiFunc.pikes_radar(discord.Embed(title="", description=""), user, "cute")
                 await ctx.reply(embed=embed)
         else:
             await ctx.reply("Can't use cutedar on noone!\nUsage: ?cutedar @user")
+
+    @commands.command()
+    async def sillydar(self, ctx: CustomContext, user: discord.Member = None):
+        if user:
+            if user.bot:
+                await ctx.reply("Not able to use radar commads on bots.")
+            else:
+                embed = await SemiFunc.pikes_radar(discord.Embed(title="", description=""), user, "silly")
+                await ctx.reply(embed=embed)
+        else:
+            await ctx.reply("Can't use sillydar on noone!\nUsage: ?sillydar @user")
 
     # These radar commands are stolen from pride bot
     # https://github.com/Pridebot-Systems/Pridebot/blob/main/src/commands/fun/
@@ -32,7 +42,7 @@ class Users(commands.Cog):
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")
             else:
-                embed = await SemiFunc.pikes_radar(self, user, "bi")
+                embed = await SemiFunc.pikes_radar(discord.Embed(title="", description=""), user, "bi")
                 await ctx.reply(embed=embed)
         else:
             await ctx.reply("Can't use bidar on noone!\nUsage: ?bidar @user")
@@ -43,7 +53,7 @@ class Users(commands.Cog):
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")
             else:
-                embed = await SemiFunc.pikes_radar(self, user, "gay")
+                embed = await SemiFunc.pikes_radar(discord.Embed(title="", description=""), user, "gay")
                 await ctx.reply(embed=embed)
         else:
             await ctx.reply("Can't use gaydar on noone!\nUsage: ?gaydar @user")
@@ -54,7 +64,7 @@ class Users(commands.Cog):
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")
             else:
-                embed = await SemiFunc.pikes_radar(self, user, "queer")
+                embed = await SemiFunc.pikes_radar(discord.Embed(title="", description=""), user, "queer")
                 await ctx.reply(embed=embed)
         else:
             await ctx.reply("Can't use queerdar on noone!\nUsage: ?queerdar @user")
@@ -65,7 +75,7 @@ class Users(commands.Cog):
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")
             else:
-                embed = await SemiFunc.pikes_radar(self, user, "rizz")
+                embed = await SemiFunc.pikes_radar(discord.Embed(title="", description=""), user, "rizz")
                 await ctx.reply(embed=embed)
         else:
             await ctx.reply("Can't use rizzdar on noone!\nUsage: ?rizzdar @user")
@@ -76,7 +86,7 @@ class Users(commands.Cog):
             if user.bot:
                 await ctx.reply("Not able to use radar commads on bots.")
             else:
-                embed = await SemiFunc.pikes_radar(self, user, "trans")
+                embed = await SemiFunc.pikes_radar(discord.Embed(title="", description=""), user, "trans")
                 await ctx.reply(embed=embed)
         else:
             await ctx.reply("Can't use transdar on noone!\nUsage: ?transdar @user")

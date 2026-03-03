@@ -31,12 +31,12 @@ class SemiFunc():
         if platform.system() == "Linux":
             banished_file = r"/home/container/misc/banished.json"
 
-        with open(banished_file) as banished_raw:
+        with open(banished_file, encoding="utf-8-sig") as banished_raw:
             banished_json = json.loads(banished_raw.read())
 
         return banished_json
     
-    async def banish_word(bot, embed, msg: discord.Message, ctx, content, banished_word, banish_message):
+    async def banish_word(embed, msg: discord.Message, ctx, content, banished_word, banish_message):
         try:
             print(f"banish '{content}' sent by {ctx.author.name}")
 
@@ -74,9 +74,9 @@ class SemiFunc():
             await msg.channel.send("An error occurred, let <@888072934114074624> know!")
             print(f"An error occurred\n{e}")
 
-    async def pikes_radar(bot, user: discord.Member, radar: str):
+    async def pikes_radar(embed: discord.Embed, user: discord.Member, radar: str):
         percent = random.randint(1, 100)
-        embed = bot.create_embed(bot, "", "", discord.Color.pink())
+        embed.color = discord.Color.pink()
 
         if percent == 67:
             if random.randint(1, 2) == 1:
@@ -116,10 +116,10 @@ class SemiFunc():
 
         return embed
 
-    async def pikes_inator(bot, ctx: CustomContext, user: discord.Member, inator_type:str, do_what: str):
+    async def pikes_inator(embed, ctx: CustomContext, user: discord.Member, inator_type:str, do_what: str):
         vanity_role_sep = 0
         role = 0
-        idsPre = ServerInfo.main_or_test_server(ctx)
+        idsPre = ServerInfo.main_or_test_server(ServerInfo, ctx)
         inator_text = get_inator_text(inator_type)
 
         if ctx.guild.get_role(role_ids[f"roles"][idsPre][inator_type]):
@@ -156,7 +156,7 @@ class SemiFunc():
                 
             await asyncio.sleep(1)
 
-            role_ids_b = role_ids[f"roles{idsPre}"]
+            role_ids_b = role_ids["roles"][idsPre]
 
             ## If user doesn't have any vanity roles, remove the seperator
             if user.get_role(role_ids_b["cute"]) == None and user.get_role(role_ids_b["smol"]) == None and user.get_role(role_ids_b["explode"]) == None and user.get_role(role_ids_b["tall"]) == None:
