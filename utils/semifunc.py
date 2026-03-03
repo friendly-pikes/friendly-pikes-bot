@@ -6,6 +6,7 @@ from utils.data import DiscordBot
 from utils.default import CustomContext
 from utils.data import ServerInfo
 
+channel_ids = ServerInfo.channels
 server_ids = ServerInfo.server_ids
 role_ids = ServerInfo.role_ids
 ignore_ids = ServerInfo.ignore_radar_ids
@@ -19,9 +20,9 @@ def get_inator_text(inator_type: str):
 
 class SemiFunc():
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(self, *args, **kwargs)
     
-    async def pikes_radar(bot, user: discord.Member, radar: str):
+    async def pikes_radar(self, bot, user: discord.Member, radar: str):
         percent = random.randint(1, 100)
         embed = DiscordBot.create_embed(bot, "", "", discord.Color.pink())
 
@@ -63,21 +64,15 @@ class SemiFunc():
 
         return embed
 
-    async def pikes_inator(bot, ctx: CustomContext, user: discord.Member, inator_type:str, do_what: str):
+    async def pikes_inator(self, bot, ctx: CustomContext, user: discord.Member, inator_type:str, do_what: str):
         vanity_role_sep = 0
         role = 0
-        idsPre = ""
+        idsPre = ServerInfo.main_or_test_server(ctx)
         inator_text = get_inator_text(inator_type)
 
-        # Test server, set idsPre so we get the test roles instead of main
-        if ctx.guild.id == 1438414082448425111:
-            idsPre = "_test"
-
-        if ctx.guild.get_role(role_ids[f"roles{idsPre}"][inator_type]):
-            vanity_role_sep = role_ids[f"seperators{idsPre}"]["vanity"]
-            role = role_ids[f"roles{idsPre}"][inator_type]
-
-
+        if ctx.guild.get_role(role_ids[f"roles"][idsPre][inator_type]):
+            vanity_role_sep = role_ids[f"seperators"][idsPre]["vanity"]
+            role = role_ids[f"roles"][idsPre][inator_type]
 
         if user.bot:
             await ctx.reply(f"I don't think {user.mention} has invoked or has been released from the {inator_text}")

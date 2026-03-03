@@ -3,10 +3,7 @@ import discord
 from discord.ext import commands
 from utils.default import CustomContext
 from utils import permissions, default, http
-from utils.data import DiscordBot
-
-from utils import permissions
-from utils.channels import channels
+from utils.data import DiscordBot, ServerInfo
 
 class Staff(commands.Cog):
     def __init__(self, bot):
@@ -14,8 +11,9 @@ class Staff(commands.Cog):
 
     @commands.command()
     async def repeat(self, ctx: CustomContext, channelId: int, *, message: str):
-        # Staff commands channel only
-        if ctx.channel.id == channels["staff_commands"] or ctx.channel.id == 1478352488301072477:
+        main_or_test = ServerInfo.main_or_test_server(ServerInfo, ctx)
+        
+        if ctx.channel.id == ServerInfo.channels[main_or_test]["staff_commands"]:
 
             if channelId == None:
                 await ctx.reply(f"Channel is needed.\nUsage: ?repeat channel_id long or short message")

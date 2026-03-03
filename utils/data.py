@@ -2,59 +2,77 @@ import discord
 import random
 import os
 import re
+import datetime
 
 from utils import permissions, default
+from utils.default import CustomContext
 from utils.config import Config
 from discord.ext.commands import AutoShardedBot, DefaultHelpCommand
-
 
 banishUserIds = [
     1403877222959419423, # Test
     495293024394543124, # FoxyOwo
     626154564202266636, # Dammy
     1070256519897161749, # Danny
-    264581569094615040, # Mathew
     1448150720712015912 # Milo
 
     ## These are innonent plp
     # 825309596784001024 # FreddyCR
     # 400045916762931203 # Archie
     # 1262934126844182633 # Rubicon
+    # 264581569094615040, # Mathew
 ]
 
 class ServerInfo():
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
     
-    server_ids = [
-        #Main
-        1414222707570118656,
-        # Test
-        1438414082448425111
-    ]
+    def main_or_test_server(self, ctx: CustomContext):
+        if ctx.guild.id == self.server_ids["test"]:
+            return "test"
+        return "main"
+    
+    server_ids = {
+        "main": 1414222707570118656,
+        "test": 1438414082448425111
+    }
+    
+    channels = {
+        "main": {
+            "staff_commands": 1477520001165430938,
+            "audit": 1477498994082185350,
+        },
+        "test": {
+            "staff_commands": 1478352488301072477,
+            "audit": 1478387549662875689
+        }
+    }
 
     role_ids = {
         "seperators": {
-            "vanity": 1477780961935491226
+            "main": {
+                "vanity": 1477780961935491226
+            },
+            "test": {
+                "vanity": 1478032301685211298
+            }
         },
         "roles": {
-            "cute": 1477781229599199434,
-            "shortie": 1477781226910912563,
-            "smol": 1477781211622539326,
-            "explode": 1477803664407003340,
-            "tall": 1478069476284039180
+            "main": {
+                "cute": 1477781229599199434,
+                "shortie": 1477781226910912563,
+                "smol": 1477781211622539326,
+                "explode": 1477803664407003340,
+                "tall": 1478069476284039180
+            },
+            "test": {
+                "cute": 1477749083404767364,
+                "shortie": 1477749159997214863,
+                "smol": 1477749196366020780,
+                "explode": 1478033086196482241,
+                "tall": 1478069476284039180
+            }
         },
-
-        "seperators_test": {
-            "vanity": 1478032301685211298
-        },
-        "roles_test": {
-            "cute": 1477749083404767364,
-            "shortie": 1477749159997214863,
-            "smol": 1477749196366020780,
-            "explode": 1478033086196482241,
-            "tall": 1478069476284039180
-        }
     }
 
     ignore_radar_ids = {
@@ -130,6 +148,9 @@ class DiscordBot(AutoShardedBot):
 
         embed.set_footer(text="Bot developed by snow2code")
 
+        if title == "Banished Words":
+            embed.timestamp = datetime.datetime.utcnow()
+
         return embed
     
     async def on_connect(self):
@@ -152,15 +173,15 @@ class DiscordBot(AutoShardedBot):
         if not self.is_ready() or msg.author.bot or \
            not permissions.can_handle(msg, "send_messages"):
             return
-        # print(msg.stickers)
+        
         ctx = await self.get_context(msg, cls=default.CustomContext)
+        
         if ctx.valid:
             await self.invoke(ctx)
         else:
             ## Other stuff first, then ban stuff
             content_lower = msg.content.lower()
-            content_lower_res = re.sub(r'[-_\\/^,.0-9]', '', content_lower)
-            content_lower_res = content_lower_res.replace(" ", "")
+            content_lower_final = re.sub(r'[-_\\/^,.]', '', content_lower).replace(" ", "")
             
             # Cute denier
             if "not cute" in content_lower or "nawt cute" in content_lower:
@@ -173,14 +194,35 @@ class DiscordBot(AutoShardedBot):
                     # print(banished_thing)
                     # print(content_lower.find(banished_thing))
 
-                    if content_lower.find(banished_thing) >= 0:
-                        if content_lower_res in self.banishedWordsBypasses:
-                            print(f"Don't banish {content_lower}")
+                    if content_lower_final.find(banished_thing) >= 0:
+                        if content_lower_final in self.banishedWordsBypasses:
+                            print(f"Don't banish '{content_lower}' sent by {ctx.author.name}")
                         else:
-                            print(f"banish {content_lower}")
-                            message = self.banishedWords[banished_thing]
-                            await msg.reply(message)
-                            await msg.delete()
+                            try:
+                                print(f"banish '{content_lower}' sent by {ctx.author.name}")
+                                message = self.banishedWords[banished_thing]
+
+                                await msg.reply(message)
+                                await msg.delete()
+
+                                # Send a message to banish to let staff know that message was banished
+                                test_or_main = ServerInfo.main_or_test_server(ServerInfo, ctx)
+                                auditChannel = msg.guild.get_channel(ServerInfo.channels[test_or_main]["audit"])
+
+                                if auditChannel:
+                                    des = f"**Message sent by {ctx.author.mention} in {ctx.channel.mention} was banished**"
+                                    des = f"{des}\n\nMessage: {msg.content}"
+                                    des = f"{des}\nDetected banished word: {banished_thing}"
+                                    des = f"{des}\nMessage ID: {msg.id}"
+
+                                    embed = self.create_embed("Banished Words", des, discord.Color.red())
+
+                                    await auditChannel.send(embed=embed)
+                                else:
+                                    print(f"Cannot find audit channel!\n\n{des}")
+                            except Exception as e:
+                                await msg.channel.send("An error occurred, let <@888072934114074624> know!")
+                                print(f"An error occurred\n{e}")
             
             # Banish users from things
             if msg.author.id == 888072934114074624 or msg.author.id == 1257541858809217035 or msg.author.id == 1094359688541372457 or msg.author.id == 1403877222959419423:
@@ -203,9 +245,6 @@ class DiscordBot(AutoShardedBot):
 
         # await self.process_commands(msg)
 
-
-        
-
     async def on_member_join(self, member):
         roleId = 1477496210414768243
         channelId = 1418951533688655989
@@ -219,7 +258,7 @@ class DiscordBot(AutoShardedBot):
             role = member.guild.get_role(roleId)
             channel = member.guild.get_channel(channelId)
             
-            embed = DiscordBot.create_embed(
+            embed = self.create_embed(
                 self,
                 "Dammy Files Banisher",
                 f"User {member.global_name} was banished. Reason being they are in the Dammy Files.\n\nUser Info:\nUser - {member.global_name}\nUserID - {member.id}",
