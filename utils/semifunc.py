@@ -77,6 +77,7 @@ class SemiFunc():
     async def pikes_radar(embed: discord.Embed, user: discord.Member, radar: str):
         percent = random.randint(1, 100)
         embed.color = discord.Color.pink()
+        embed.set_footer(text="Bot developed by snow2code")
 
         if percent == 67:
             if random.randint(1, 2) == 1:
