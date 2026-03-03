@@ -111,8 +111,10 @@ class DiscordBot(AutoShardedBot):
                             await msg.delete()
 
     async def on_member_join(self, member):
+        test_or_main = ServerInfo.main_or_test_server(ServerInfo, member)
+
         roleId = 1477496210414768243
-        channelId = 1418951533688655989
+        channelId = ServerInfo.channels[test_or_main]["audit"]
         banishUserIds = SemiFunc.get_banished()["banished_ids"]
 
         # Test Server
@@ -125,7 +127,6 @@ class DiscordBot(AutoShardedBot):
             channel = member.guild.get_channel(channelId)
             
             embed = self.create_embed(
-                self,
                 "Dammy Files Banisher",
                 f"User {member.global_name} was banished. Reason being they are in the Dammy Files.\n\nUser Info:\nUser - {member.global_name}\nUserID - {member.id}",
                 discord.Color.pink()

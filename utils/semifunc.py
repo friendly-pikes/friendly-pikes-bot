@@ -2,6 +2,7 @@ import asyncio
 import discord
 import random
 import json
+import platform
 
 # from utils.data import DiscordBot
 from utils.default import CustomContext
@@ -24,9 +25,13 @@ class SemiFunc():
         super().__init__(*args, **kwargs)
 
     def get_banished():
-        exec_dir = __file__.replace(r"\utils\semifunc.py", "")
         banished_json = None
-        with open(f"{exec_dir}\\misc\\banished.json") as banished_raw:
+        banished_file = r"D:\Code\Discord Bots\friendly-pikes-bot\misc\banished.json"
+
+        if platform.system() == "Linux":
+            banished_file = r"/home/container/misc/banished.json"
+
+        with open(banished_file) as banished_raw:
             banished_json = json.loads(banished_raw.read())
 
         return banished_json
