@@ -1,3 +1,5 @@
+### LEGACY! USE THE "Main" BRANCH INSTEAD!
+
 # Friendly Pikes Helper
 
 #### A basic and rather silly bot made for friendly pikes
