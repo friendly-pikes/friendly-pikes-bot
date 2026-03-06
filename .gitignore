@@ -9,3 +9,6 @@ __pycache__/
 
 # Private things. Release as needed to staff or whoever
 _private
+
+# Other
+misc/logs/*.log

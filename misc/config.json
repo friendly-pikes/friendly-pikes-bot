@@ -1,0 +1,91 @@
+{
+    "prefix": "?",
+    "server_name": "Friendly Pikes",
+    "bot_name": "Friendly Pikes Helper",
+    "owner_id": 888072934114074624,
+    
+    "output_on_command_used": true,
+    "log_audits": false,
+
+    "disabled_commands": [
+        "ban",
+        "afk"
+    ],
+
+    "topics": [
+        "Who is your favourite person and/or animal",
+        "What is your favourite item",
+        "What is your favourite TV Show or Movie?",
+        "What is your favourite Video Game / Board Game",
+
+        "What do you think should be added to the bot?"
+    ],
+
+    "server_ids": {
+        "main": 1414222707570118656,
+        "test": 1438414082448425111
+    },
+
+    "command_ignores": {
+        "explode": [],
+        "cutinate": [
+            665263662361214986
+        ],
+        "smolinate": [],
+        "tallinate": [],
+        "sillinate": []
+    },
+
+    "channel_ids": {
+        "main": {
+            "staff_commands": 1477520001165430938,
+            "audit": 1477498994082185350
+        },
+        "test": {
+            "staff_commands": 1478352488301072477,
+            "audit": 1478820368436428913
+        }
+    },
+
+    "role_ids": {
+        "main": {
+            "staff": 1477488631982723153,
+
+            
+            "cute": 1477781229599199434,
+            "shortie": 1477781226910912563,
+            "smol": 1477781211622539326,
+            "explode": 1477803664407003340,
+            "tall": 1478069476284039180,
+            "silly": 1479296383461757008,
+            "banished": 1477496210414768243,
+
+            "vanity": 1477780961935491226,
+            "verified": 1477494681959923743
+        },
+        "test": {
+            "staff": 1478885035938414682,
+
+
+            "cute": 1477749083404767364,
+            "shortie": 1477749159997214863,
+            "smol": 1477749196366020780,
+            "explode": 1478033086196482241,
+            "tall": 1478069476284039180,
+            "silly": 1479449108774256712,
+            "banished": 1477575309476761672,
+
+            "vanity": 1478032301685211298,
+            "verified": 1478900126972907652
+        }
+    },
+
+    "emoji_ids": {
+        "main": {
+            "owo": 1479235584127143978
+        },
+        "test": {
+            "owo": 1479511064990449807
+        }
+    }
+}

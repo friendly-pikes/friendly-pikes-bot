@@ -1,0 +1,54 @@
+import discord
+
+from datetime import datetime
+from discord.ext import commands
+from utils.discordbot import Bot
+from utils.semifunc import SemiFunc
+from utils.files import files
+
+class OnMessageEdit(commands.Cog):
+    def __init__(self, bot):
+        self.bot: Bot = bot
+
+    @commands.Cog.listener()
+    async def on_message_edit(self, before: discord.Message, after: discord.Message):
+        doLog = True
+        
+        # If main server, set doLog to config's log_audits value
+        if before.guild.id == files.get_server_id("main"):
+            doLog = files.get_config_entry("log_audits")
+        
+
+        if doLog:
+            if before.author.bot == False:
+                auditChannelId = files.get_channel_id(before, "audit")
+                auditChannel = self.bot.get_channel(auditChannelId)
+                
+                follow = f"https://discord.com/channels/{before.guild.id}/{before.channel.id}/{before.id}"
+
+                embed = self.bot.create_embed_notitle(
+                    description=f"**Message sent by {before.author.mention} was edited in {before.channel.mention}** [Jump To Message]({before.channel})",
+                    color=discord.Color.blue(),
+                    fields=[
+                        {
+                            "name": "before:",
+                            "value": f"```{before.content}```",
+                            "inline": False
+                        },
+                        {
+                            "name": "after:",
+                            "value": f"```{after.content}```",
+                            "inline": False
+                        }
+                    ]
+                )
+
+                embed.timestamp = datetime.utcnow()
+                embed.set_author(name=before.author.name, icon_url=before.author.avatar)
+                embed.set_footer(text=f"User ID: {before.author.id} • Bot developed by snow2code")
+                
+                await auditChannel.send(embed=embed)
+
+
+async def setup(bot):
+    await bot.add_cog(OnMessageEdit(bot))
