@@ -4,8 +4,9 @@
     "bot_name": "Friendly Pikes Helper",
     "owner_id": 888072934114074624,
     
-    "output_on_command_used": true,
-    "log_audits": false,
+    "output_on_command_used_enabled":  true,
+    "log_audits_enabled":              false,
+    "join_message_enabled":            true,
 
     "disabled_commands": [
         "ban",
@@ -38,10 +39,18 @@
 
     "channel_ids": {
         "main": {
+            "boosts": 1479568834019987486,
+            "welcome": 1477489298931581080,
+            "general-chat": 1414222708324958385,
+
             "staff_commands": 1477520001165430938,
             "audit": 1477498994082185350
         },
         "test": {
+            "boosts": 1479569206696480778,
+            "welcome": 1479559484647936042,
+            "general-chat": 1479563267562012693,
+
             "staff_commands": 1478352488301072477,
             "audit": 1478820368436428913
         }

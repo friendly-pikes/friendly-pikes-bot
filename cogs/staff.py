@@ -1,4 +1,5 @@
 import discord
+import asyncio
 
 import utils.files as files
 from datetime import datetime
@@ -13,7 +14,7 @@ class Staff(commands.Cog):
 
     @commands.guild_only()
     @commands.hybrid_command(name="ban", description="Ban a user! (Diffrent from banish)")
-    async def ban(self, ctx: Context, user: discord.Member = None):
+    async def ban(self, ctx: Context, user: discord.Member = None, *, reason: str = "No reason provided."):
         if SemiFunc.command_disabled(ctx):
             await ctx.reply("That command is currently disabled.")
             return
@@ -23,17 +24,18 @@ class Staff(commands.Cog):
             return
         
         if user:
-            if SemiFunc.is_staff(ctx.author):
+            if SemiFunc.is_staff(user):
                 await ctx.reply(f"Cannot ban a staff member")
             else:
+                print(reason)
                 reason = f"{datetime.now().strftime('%d/%m/%Y - %H:%M')} @{ctx.author.name} (Permanent): {reason}"
                 await user.ban(delete_message_days=1, reason=reason)
         else:
-            await ctx.reply("Usage: ?ban @user long reason (This'll remove their messages from the last day)")
+            await ctx.reply("Usage: ?kick @user reason")
 
     @commands.guild_only()
     @commands.hybrid_command(name="kick", description="Kick a user!")
-    async def kick(self, ctx: Context, user: discord.Member = None):
+    async def kick(self, ctx: Context, user: discord.Member = None, *, reason: str = "No reason provided."):
         if SemiFunc.command_disabled(ctx):
             await ctx.reply("That command is currently disabled.")
             return
@@ -43,11 +45,12 @@ class Staff(commands.Cog):
             return
         
         if user:
-            if SemiFunc.is_staff(ctx.author):
-                await ctx.reply(f"Cannot ban a staff member")
+            if SemiFunc.is_staff(user):
+                await ctx.reply(f"Cannot kick a staff member")
             else:
-                reason = f"{datetime.now().strftime('%d/%m/%Y - %H:%M')} @{ctx.author.name}: {reason}"
-                # await user.ban(delete_message_days=1, reason=reason)
+                await SemiFunc.moderate_user(self, ctx, user, "kick", [reason])
+                asyncio.sleep(0.5)
+                await user.kick(reason="reason")
         else:
             await ctx.reply("Usage: ?ban @user long reason (This'll remove their messages from the last day)")
 
@@ -107,6 +110,7 @@ class Staff(commands.Cog):
                     await ctx.reply(f"{user.mention} has been unbanished!")
                 else:
                     await ctx.reply(f"Cannot unbanish {user.mention}, they aren't banished.")
+
 
     @commands.guild_only()
     @commands.hybrid_command(name="afk", description="Set your AFK status!")

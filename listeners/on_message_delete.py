@@ -14,9 +14,9 @@ class OnMessageDelete(commands.Cog):
     async def on_message_delete(self, message: discord.Message):
         doLog = True
         
-        # If main server, set doLog to config's log_audits value
+        # If main server, set doLog to config's log_audits_enabled value
         if message.guild.id == files.get_server_id("main"):
-            doLog = files.get_config_entry("log_audits")
+            doLog = files.get_config_entry("log_audits_enabled")
         
 
         if doLog:

@@ -14,9 +14,9 @@ class OnMessageEdit(commands.Cog):
     async def on_message_edit(self, before: discord.Message, after: discord.Message):
         doLog = True
         
-        # If main server, set doLog to config's log_audits value
+        # If main server, set doLog to config's log_audits_enabled value
         if before.guild.id == files.get_server_id("main"):
-            doLog = files.get_config_entry("log_audits")
+            doLog = files.get_config_entry("log_audits_enabled")
         
 
         if doLog:

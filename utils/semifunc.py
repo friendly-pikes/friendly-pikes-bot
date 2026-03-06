@@ -33,17 +33,25 @@ class SemiFunc():
     
     def get_role_id(ctx: Context, rolename: str):
         roles = files.get_role_ids(ctx)
+
         if roles[rolename]:
             return roles[rolename]
+        
         return None
 
     def is_staff(user: discord.Member):
-        staff = SemiFunc.get_role_id(user, "staff")
-        
-        if user.get_role(staff):
+        role = SemiFunc.get_role_id(user, "staff")
+
+        if user.get_role(role):
             return True
         
         return False
+        # staff = SemiFunc.get_role_id(user, "staff")
+        
+        # if user.get_role(staff):
+        #     return True
+        
+        # return False
     
     async def add_afk(ctx: Context, message: str):
         afk = files.get_filepath("afk", "json")
@@ -68,7 +76,7 @@ class SemiFunc():
 
             json.dump(data, file, indent=4, ensure_ascii=False)
 
-    async def moderate_user(bot, ctx: Context, moderation_type: str, args: []):
+    async def moderate_user(bot, ctx: Context, user: discord.Member, moderation_type: str, args: []):
         moderation_embed = discord.Embed()
         isGud = False
 
@@ -77,11 +85,11 @@ class SemiFunc():
         if moderation_type == "kick":
             isGud = True
             moderation_embed.description = f"You've been kicked from {files.get_server_name()} by {ctx.author.name} ({ctx.author.display_name})"
-            moderation_embed.description = moderation_embed.description + f"\n\nReason: {args[1]}\nPunisher: {ctx.author.name}"
+            moderation_embed.description = moderation_embed.description + f"\n\nReason: {args[0]}\nPunisher: {ctx.author.name}\n\n\nServer Invite: https://discord.gg/X8QqpeYgGF"
         elif moderation_type == "ban":
             isGud = True
             moderation_embed.description = f"You've been banned from {files.get_server_name()} permanently by {ctx.author.name} ({ctx.author.display_name})"
-            moderation_embed.description = moderation_embed.description + f"\n\nReason: {args[1]}\nPunisher: {ctx.author.name}"
+            moderation_embed.description = moderation_embed.description + f"\n\nReason: {args[0]}\nPunisher: {ctx.author.name}\n\n\nServer Invite: https://discord.gg/X8QqpeYgGF"
         elif moderation_type == "message_banished":
             audit = ctx.guild.get_channel(SemiFunc.get_channel_id(ctx, "audit"))
 
@@ -97,10 +105,7 @@ class SemiFunc():
             return
 
         if isGud:
-            await ctx.reply(embed=discord.Embed(
-                title=f"{files.get_server_name()}",
-                description=f"You've been kicked from {files.get_server_name()}"
-            ))
+            await user.send(embed=moderation_embed)
 
     async def banish_word(bot, msg: discord.Message, ctx, content, banished_word, banish_message):
         embed = discord.Embed()
@@ -129,53 +134,6 @@ class SemiFunc():
             # msg.channel.send
             await msg.reply(f"A error occured while banishing this message\n{SemiFunc.mention_snowy()}\n```{e}```")
 
-    # def audit_embed(audit_type: str, args: []):
-    #     embed = discord.Embed()
-        
-    #     if len(args):
-    #         ## For messages, we add the user's pfp and name as smth, i dunno
-    #         if "message_" in audit_type:
-    #             user: discord.User = args[0]
-    #             channel_id: int = args[1].id
-    #             color = discord.Color.dark_embed()
-
-    #             message: discord.Message = args[2]
-
-    #             if audit_type == "message_deleted":
-
-    #                 embed.description = f"**Message sent by <@{user.id}> was deleted in <#{channel_id}>**"
-                    
-    #                 if len(message.attachments) > 0:
-    #                     content = ""
-
-    #                     for attachment in message.attachments:
-    #                         content = content + f"{attachment.url}\n"
-
-    #                     if message.content == "" or message.content == None:
-    #                         embed.add_field(name="Content:", value=f"```Attachments:\n{content}```", inline=False)
-    #                     else:
-    #                         embed.add_field(name="Content:", value=f"```{message.content}\n\nAttachments:\n{content}```", inline=False)
-    #                 else:
-    #                     embed.add_field(name="Content:", value=f"```{message.content}```", inline=False)
-                    
-    #                 color = discord.Color.red()
-    #             if audit_type == "message_edited":
-    #                 before: discord.Message = args[2]
-    #                 after: discord.Message = args[3]
-
-    #                 embed.description = f"**Message sent by <@{user.id}> was edited in <#{channel_id}>**"
-    #                 embed.add_field(name="before:", value=f"```{before.content}```", inline=False)
-    #                 embed.add_field(name="after:", value=f"```{after.content}```", inline=False)
-    #                 color = discord.Color.blue()
-
-    #             embed.color = color
-
-    #             embed.set_author(name=user.name, icon_url=user.avatar)
-    #             embed.set_footer(text=f"User ID: {message.author.id} • Bot developed by snow2code")
-    #             embed.timestamp = datetime.datetime.utcnow()
-
-    #     return embed
-    
     def get_inator_text(inator_type: str):
         inator_type = inator_type.lower()
         inator_text = f"{inator_type}inator"
@@ -286,7 +244,7 @@ class SemiFunc():
         return False
     
     def log_command_use(bot, author: discord.User, message_content, interaction: discord.Interaction):
-        if files.get_config_entry("output_on_command_used"):
+        if files.get_config_entry("output_on_command_used_enabled"):
             if interaction == None:
                 bot.logger.info(msg=f"{author}: {message_content}")
             else:

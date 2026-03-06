@@ -21,8 +21,25 @@ class OnMessage(commands.Cog):
         banished_ignore = files._banished()['banishedWordsBypasses']
         msg_content_lower = msg.content.lower()
 
+
+        # Boost message
+        if msg.type == discord.MessageType.premium_guild_subscription:
+            boosts_channel = msg.guild.get_channel( SemiFunc.get_channel_id(msg, "boosts") )
+            total_boosts = int(boosts_channel.topic.replace("Boost messages! Total boosts: ", ""))
+            boosts = msg.guild.premium_subscription_count
+
+            if total_boosts == boosts:
+                total_boosts = total_boosts + 1
+
+            boosts_channel.edit(topic=f"Boost messages! Total boosts: {boosts})")
+            await boosts_channel.send(f"Thanks for boosting our server {msg.mention}!\nWe now have {boosts}.. or {total_boosts}, we didn't test this yet.")
+
+            return
+
+
         if msg.author.bot:
             return
+        
         if len(msg.mentions) > 0:
             for mention in msg.mentions:
                 with open(afk, 'r+', encoding='utf8') as file:
@@ -83,13 +100,13 @@ class OnMessage(commands.Cog):
                     
                 if shouldBanish:
                     if msg_content_lower.find(banished_thing) >= 0:
-                        await SemiFunc.moderate_user(self.bot, msg, "message_banished", [banished[banished_thing], banished_thing])
+                        await SemiFunc.moderate_user(self.bot, msg, msg.author, "message_banished", [banished[banished_thing], banished_thing])
                         await msg.delete()
                 
             # Last now - Private banish word list
             for banished_thing in banished_words_private.private_banished():
                 if msg_content_lower.find(banished_thing) >= 0:
-                    await SemiFunc.moderate_user(self.bot, msg, "message_banished", [banished[banished_thing], banished_thing])
+                    await SemiFunc.moderate_user(self.bot, msg, msg.author, "message_banished", [banished[banished_thing], banished_thing])
                     await msg.delete()
 
         # Banish Snowy Paws

@@ -42,6 +42,13 @@ class Bot(AutoShardedBot):
 
         return embed
     
+    def create_embed(self, title:str = "Embed Title", description: str = "Embed Description", color: discord.Color = discord.Color.dark_embed()):
+        embed = discord.Embed(description=description, color=color)
+        embed.set_footer(text="Bot developed by snow2code")
+        
+        return embed
+    
+    
 
     async def setup_hook(self):
         ## Load listener cogs
