@@ -12,11 +12,18 @@
         "tenorcom",
         
         "ofwhat",
-        "fwop"
+        "fwop",
+        "barkbarkwoofwoof",
+        "<:shoppingcart:1477691446948663367>"
     ],
     "banished_words": {
         "daddy": "Don't say something like that-!",
+        "goodboy": "Don't say something like that-!",
+        "goodgirl": "Don't say something like that-!",
+        "eatme": "Don't say something like that-!",
+        "$uicide": "Don't say that.",
         
+
         "____SLUR BYPASSES____": "",
         "ngga": "Do not bypass saying the nword!",
 
@@ -48,7 +55,6 @@
         "danny": "Please don't talk abbout Danny.",
 
 
-        "fw": "Please don't talk about Furry Wonderland.",
         "furrywonderland": "Please don't talk about Furry Wonderland."
     }
 }

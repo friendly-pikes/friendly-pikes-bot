@@ -23,7 +23,7 @@ class CustomContext(commands.Context):
     def ping(self) -> str:
         return "Hello world!"
 
-    @commands.command()
+    @commands.hybrid_command()
     async def ping(self, ctx: CustomContext):
         await ctx.send(f"Pong! {ctx.ping()}")
     """

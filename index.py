@@ -1,13 +1,17 @@
 import discord
+import os
 
-from utils import config, data
+from dotenv import load_dotenv
+from utils.semifunc import SemiFunc
+from utils import data
+load_dotenv()
 
-config = config.Config.from_env(".env")
-print("Logging in...")
+token = os.getenv('DISCORD_TOKEN')
+config = SemiFunc.get_config()
 
 bot = data.DiscordBot(
-    config=config, command_prefix=config.discord_prefix,
-    prefix=config.discord_prefix, command_attrs=dict(hidden=True),
+    command_prefix=config["prefix"],
+    prefix=config["prefix"], command_attrs=dict(hidden=True),
     help_command=data.HelpFormat(),
     allowed_mentions=discord.AllowedMentions(
         everyone=False, roles=False, users=True
@@ -20,6 +24,6 @@ bot = data.DiscordBot(
 )
 
 try:
-    bot.run(config.discord_token)
+    bot.run(token)
 except Exception as e:
-    print(f"Error when logging in: {e}")
+    bot.logger.error(f"Error when logging in: {e}")

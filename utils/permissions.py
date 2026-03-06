@@ -2,6 +2,10 @@ import discord
 from typing import Union, TYPE_CHECKING
 from discord.ext import commands
 
+from utils.semifunc import SemiFunc
+
+config = SemiFunc.get_config()
+
 if TYPE_CHECKING:
     from utils.default import CustomContext
 
@@ -28,7 +32,7 @@ def can_run_staff_cmd(user: discord.Member):
 
 def is_owner(ctx: "CustomContext") -> bool:
     """ Checks if the author is one of the owners """
-    if ctx.author.id == ctx.bot.config.discord_owner_id:
+    if ctx.author.id == config["owner_id"]:
         return True
     if ctx.author.get_role(1414224054877028372):
         return True
@@ -37,7 +41,7 @@ def is_owner(ctx: "CustomContext") -> bool:
 
 async def check_permissions(ctx: "CustomContext", perms, *, check=all) -> bool:
     """ Checks if author has permissions to a permission """
-    if ctx.author.id == ctx.bot.config.discord_owner_id:
+    if ctx.author.id == config["owner_id"]:
         return True
 
     resolved = ctx.channel.permissions_for(ctx.author)
@@ -61,8 +65,8 @@ async def check_priv(ctx: "CustomContext", member: discord.Member) -> Union[disc
 
         if ctx.author.id == ctx.guild.owner.id:
             return False
-        if member.id == ctx.bot.config.discord_owner_id:
-            if ctx.author.id != ctx.bot.config.discord_owner_id:
+        if member.id == config["owner_id"]:
+            if ctx.author.id != config["owner_id"]:
                 return await ctx.send(f"I can't {ctx.command.name} my creator ;-;")
         if member.id == ctx.guild.owner.id:
             return await ctx.send(f"You can't {ctx.command.name} the owner, lol")

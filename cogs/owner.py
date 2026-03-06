@@ -5,8 +5,10 @@ import os
 
 from discord.ext import commands
 from utils.default import CustomContext
-from utils import permissions, default, http
+from utils import permissions, default
 from utils.data import DiscordBot
+
+from utils.semifunc import SemiFunc
 
 class Owner(commands.Cog):
     def __init__(self, bot):
@@ -16,6 +18,7 @@ class Owner(commands.Cog):
     @commands.check(permissions.is_owner)
     async def load(self, ctx: CustomContext, name: str):
         """ Loads an extension. """
+        SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction)
         try:
             await self.bot.load_extension(f"cogs.{name}")
         except Exception as e:
@@ -26,6 +29,7 @@ class Owner(commands.Cog):
     @commands.check(permissions.is_owner)
     async def unload(self, ctx: CustomContext, name: str):
         """ Unloads an extension. """
+        SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction)
         try:
             await self.bot.unload_extension(f"cogs.{name}")
         except Exception as e:
@@ -36,6 +40,7 @@ class Owner(commands.Cog):
     @commands.check(permissions.is_owner)
     async def reload(self, ctx: CustomContext, name: str):
         """ Reloads an extension. """
+        SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction)
         try:
             await self.bot.reload_extension(f"cogs.{name}")
         except Exception as e:
@@ -46,6 +51,7 @@ class Owner(commands.Cog):
     @commands.check(permissions.is_owner)
     async def reloadall(self, ctx: CustomContext):
         """ Reloads all extensions. """
+        SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction)
         error_collection = []
         for file in os.listdir("cogs"):
             if not file.endswith(".py"):
@@ -76,6 +82,7 @@ class Owner(commands.Cog):
     @commands.check(permissions.is_owner)
     async def reloadutils(self, ctx: CustomContext, name: str):
         """ Reloads a utils module. """
+        SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction)
         name_maker = f"utils/{name}.py"
         try:
             module_name = importlib.import_module(f"utils.{name}")
@@ -86,6 +93,14 @@ class Owner(commands.Cog):
             error = default.traceback_maker(e)
             return await ctx.send(f"Module **{name_maker}** returned error and was not reloaded...\n{error}")
         await ctx.send(f"Reloaded module **{name_maker}**")
+
+    @commands.command()
+    @commands.check(permissions.is_owner)
+    async def give(self, ctx: CustomContext, user: discord.Member, role_id: int):
+        role = ctx.guild.get_role(role_id)
+
+        await user.add_roles(role)
+    
 
 
 async def setup(bot):
