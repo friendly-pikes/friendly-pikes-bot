@@ -100,7 +100,7 @@ class OnMessage(commands.Cog):
                                 await msg.reply(f"`{entry['name']}` is AFK: {entry['msg']}\nThey've been AFK for {hours} {hours_text} {minutes} {minutes_text}")
             
         # OwO reaction
-        if msg.content.lower() == "owo" or msg.content.lower == "<:fox_owo:1479235584127143978>" >= 0:
+        if msg.content.lower() == "owo" or msg.content.lower() == "<:fox_owo:1479235584127143978>":
             # Do not owo react in audits
             if msg.channel.id != SemiFunc.get_channel_id(msg, "audit"):
                 owoId = files.get_emoji_ids(msg)['owo']
