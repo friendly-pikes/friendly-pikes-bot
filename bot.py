@@ -15,11 +15,7 @@ bot = Bot(
     allowed_mentions=discord.AllowedMentions(
         everyone=False, roles=False, users=True
     ),
-    intents=discord.Intents(
-        # kwargs found at https://docs.pycord.dev/en/master/api.html?highlight=discord%20intents#discord.Intents
-        guilds=True, members=True, messages=True, reactions=True,
-        presences=True, message_content=True,
-    )
+    intents=discord.Intents.all()
 )
 
 try:

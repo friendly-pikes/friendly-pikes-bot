@@ -9,7 +9,7 @@ class OnReady(commands.Cog):
         self.bot: Bot = bot
 
     @commands.Cog.listener()
-    async def whatever(self):
+    async def on_ready(self):
         self.bot.logger.info(msg=f"")
         self.bot.logger.info(msg=f"Logged in as {self.bot.user.name}")
         await self.bot.change_presence(status=discord.Status.invisible)

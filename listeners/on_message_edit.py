@@ -15,39 +15,40 @@ class OnMessageEdit(commands.Cog):
         doLog = True
         
         # If main server, set doLog to config's log_audits_enabled value
-        if before.guild.id == files.get_server_id("main"):
-            doLog = files.get_config_entry("log_audits_enabled")
         
-
-        if doLog:
-            if before.author.bot == False:
-                auditChannelId = files.get_channel_id(before, "audit")
-                auditChannel = self.bot.get_channel(auditChannelId)
+        if not before.author.bot:
+            if before.guild.id == files.get_server_id("main"):
+                doLog = files.get_config_entry("log_audits_enabled")
                 
-                follow = f"https://discord.com/channels/{before.guild.id}/{before.channel.id}/{before.id}"
+            if doLog:
+                if before.author.bot == False:
+                    auditChannelId = files.get_channel_id(before, "audit")
+                    auditChannel = self.bot.get_channel(auditChannelId)
+                    
+                    follow = f"https://discord.com/channels/{before.guild.id}/{before.channel.id}/{before.id}"
 
-                embed = self.bot.create_embed_notitle(
-                    description=f"**Message sent by {before.author.mention} was edited in {before.channel.mention}** [Jump To Message]({before.channel})",
-                    color=discord.Color.blue(),
-                    fields=[
-                        {
-                            "name": "before:",
-                            "value": f"```{before.content}```",
-                            "inline": False
-                        },
-                        {
-                            "name": "after:",
-                            "value": f"```{after.content}```",
-                            "inline": False
-                        }
-                    ]
-                )
+                    embed = self.bot.create_embed_notitle(
+                        description=f"**Message sent by {before.author.mention} was edited in {before.channel.mention}** [Jump To Message]({before.channel})",
+                        color=discord.Color.blue(),
+                        fields=[
+                            {
+                                "name": "before:",
+                                "value": f"```{before.content}```",
+                                "inline": False
+                            },
+                            {
+                                "name": "after:",
+                                "value": f"```{after.content}```",
+                                "inline": False
+                            }
+                        ]
+                    )
 
-                embed.timestamp = datetime.utcnow()
-                embed.set_author(name=before.author.name, icon_url=before.author.avatar)
-                embed.set_footer(text=f"User ID: {before.author.id} • Bot developed by snow2code")
-                
-                await auditChannel.send(embed=embed)
+                    embed.timestamp = datetime.utcnow()
+                    embed.set_author(name=before.author.name, icon_url=before.author.avatar)
+                    embed.set_footer(text=f"User ID: {before.author.id} • Bot developed by snow2code")
+                    
+                    await auditChannel.send(embed=embed)
 
 
 async def setup(bot):

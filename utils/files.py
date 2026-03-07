@@ -15,6 +15,15 @@ def open_file(dir, filename, fileext):
 
     return file
 
+def open_file_rawpath(path):
+    file = None
+    filepath = os.path.abspath(f"{path}")
+
+    with open(filepath, 'r+', encoding='utf8') as raw:
+        file = json.loads(raw.read())
+
+    return file
+
 def get_filepath(filename, fileext):
     filepath = os.path.abspath(f"misc/{filename}.{fileext}")
     return filepath
@@ -60,9 +69,6 @@ def get_channel_ids(ctx):
 def get_role_ids(ctx):
     main_test = main_or_test(ctx)
     return _config()['role_ids'][main_test]
-
-def get_owner_id():
-    return _config()['owner_id']
 
 
 def get_server_id(name: str):

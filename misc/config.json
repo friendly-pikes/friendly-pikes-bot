@@ -3,14 +3,19 @@
     "server_name": "Friendly Pikes",
     "bot_name": "Friendly Pikes Helper",
     "owner_id": 888072934114074624,
+    "owners": [
+        888072934114074624,
+        1262124659814695005,
+        1267324371660177469
+    ],
     
     "output_on_command_used_enabled":  true,
     "log_audits_enabled":              false,
     "join_message_enabled":            true,
+    "leave_message_enabled":           true,
 
     "disabled_commands": [
-        "ban",
-        "afk"
+        
     ],
 
     "topics": [
@@ -35,6 +40,19 @@
         "smolinate": [],
         "tallinate": [],
         "sillinate": []
+    },
+
+    "join_roles": {
+        "leadership": 1477499920507338885,
+        "custom-roles": 1477515719875756042,
+        "color-roles": 1477515826767593545,
+        "user-info": 1477500272443133972,
+        "metadata": 1477499838995370146,
+        
+        "member": [
+            1418952980643840083,
+            1477488597916713091
+        ]
     },
 
     "channel_ids": {

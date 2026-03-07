@@ -25,6 +25,14 @@ class SemiFunc():
             color=color
         )
 
+    def get_server_id(what):
+        config = files._config()
+        
+        if config['server_ids'][what]:
+            return config['server_ids'][what]
+        
+        return None
+    
     def get_channel_id(ctx: Context, channelname: str):
         channelids = files.get_channel_ids(ctx)
         if channelids[channelname]:
@@ -38,6 +46,12 @@ class SemiFunc():
             return roles[rolename]
         
         return None
+
+    def is_owner(user: discord.Member):
+        config = files._config()
+        if user.id in config['owners']:
+            return True
+        return False
 
     def is_staff(user: discord.Member):
         role = SemiFunc.get_role_id(user, "staff")
@@ -53,7 +67,23 @@ class SemiFunc():
         
         # return False
     
-    async def add_afk(ctx: Context, message: str):
+    async def update_afk(ctx: Context, message: str, return_message):
+        afk = files.get_filepath("afk", "json")
+
+        with open(afk, "r", encoding="utf8") as file:
+            data = json.load(file)
+
+        afk_since = ctx.message.created_at.strftime("%d/%m/%Y %H:%M")
+
+        for entry in data['users']:
+            if entry['user_id'] == ctx.author.id:
+                entry['msg'] = message
+                break
+                
+        with open(afk, "w", encoding="utf8") as file:
+            json.dump(data, file, indent=4, ensure_ascii=False)
+
+    async def add_afk(ctx: Context, message: str, return_message):
         afk = files.get_filepath("afk", "json")
         
         # for entry in afk:
@@ -68,6 +98,7 @@ class SemiFunc():
             data['users'].append({
                 "name": ctx.author.display_name,
                 "user_id": ctx.author.id,
+                "return_message": return_message,
                 "msg": message,
                 "since": f"{afkSince_createdat}"
             })
@@ -77,30 +108,42 @@ class SemiFunc():
             json.dump(data, file, indent=4, ensure_ascii=False)
 
     async def moderate_user(bot, ctx: Context, user: discord.Member, moderation_type: str, args: []):
-        moderation_embed = discord.Embed()
+        moderation_embed = bot.create_embed()
         isGud = False
 
-        moderation_embed.title = f"Staff at {files.get_server_name()}"
         
         if moderation_type == "kick":
             isGud = True
+            moderation_embed.title = f"Staff at {files.get_server_name()}"
             moderation_embed.description = f"You've been kicked from {files.get_server_name()} by {ctx.author.name} ({ctx.author.display_name})"
             moderation_embed.description = moderation_embed.description + f"\n\nReason: {args[0]}\nPunisher: {ctx.author.name}\n\n\nServer Invite: https://discord.gg/X8QqpeYgGF"
         elif moderation_type == "ban":
             isGud = True
+            moderation_embed.title = f"Staff at {files.get_server_name()}"
             moderation_embed.description = f"You've been banned from {files.get_server_name()} permanently by {ctx.author.name} ({ctx.author.display_name})"
             moderation_embed.description = moderation_embed.description + f"\n\nReason: {args[0]}\nPunisher: {ctx.author.name}\n\n\nServer Invite: https://discord.gg/X8QqpeYgGF"
+        elif moderation_type == "mute":
+            isGud = True
+            moderation_embed.title = f"Staff at {files.get_server_name()}"
+            moderation_embed.description = f"You've been muted in {files.get_server_name()} by {ctx.author.name} ({ctx.author.display_name})"
+            moderation_embed.description = moderation_embed.description + f"\n\nReason: {args[0]}\nPunisher: {ctx.author.name}"
+        elif moderation_type == "unmute":
+            isGud = True
+            moderation_embed.title = f"Staff at {files.get_server_name()}"
+            moderation_embed.description = f"You've been unmuted in {files.get_server_name()} by {ctx.author.name} ({ctx.author.display_name})"
+            moderation_embed.description = moderation_embed.description + f"\n\nReason: {args[0]}\nPunisher: {ctx.author.name}"
         elif moderation_type == "message_banished":
             audit = ctx.guild.get_channel(SemiFunc.get_channel_id(ctx, "audit"))
 
             # isGud = True
             moderation_embed.title = f"**Message sent by {ctx.author.mention} in {ctx.channel.mention} was banished**"
-            moderation_embed.description = f"\n\nMessage: {ctx.message.content}\n"
+            moderation_embed.description = f"\n\nMessage: {ctx.content}\n"
             moderation_embed.description = f"Detected banished word: {args[1]}\n"
-            moderation_embed.description = f"Message ID: {ctx.message.id}"
+            moderation_embed.description = f"Message ID: {ctx.id}"
+            moderation_embed.color = discord.Color.red()
 
             await ctx.reply(f"{args[0]}")
-            await audit.send
+            await audit.send(embed=moderation_embed)
 
             return
 
@@ -221,14 +264,29 @@ class SemiFunc():
 
 
         embed.title = f"{emoji} {radar.capitalize()} Radar {emoji}"
-        embed.description = f"{user.mention} is {percent}% {radar}! {emoji}"
+        
+        if radar == "rizz":
+            embed.description = f"{user.mention} has {percent}% {radar}! {emoji}"
+        else:
+            embed.description = f"{user.mention} is {percent}% {radar}! {emoji}"
+
         embed.color = discord.Color.pink()
         
-        if radar == "cute" and percent >= 80:
-            embed.description = f"{embed.description}\n{user.global_name} is totally cute!"
+        if radar == "cute":
+            if percent >= 50 and percent < 80:
+                embed.description = f"{embed.description}\n{user.name} is totally cute!"
+            elif percent >= 80:
+                embed.description = f"{embed.description}\n{user.name} is **A D O R A B L E**!"
+        elif radar == "silly":
+            if percent >= 50 and percent < 80:
+                embed.description = f"{embed.description}\n{user.name} is totally silly!"
+            elif percent >= 80:
+                embed.description = f"{embed.description}\n{user.name} is **T O O  S I L L Y**!"
         elif radar == "gay" and percent >= 50:
-            embed.description = f"{embed.description}\n{user.global_name} is totally gay!"
+            embed.description = f"{embed.description}\n{user.name} is totally gay!"
         
+        embed.set_footer(text="Bot developed by snow2code")
+
         return embed
     
     def command_disabled(ctx: Context):

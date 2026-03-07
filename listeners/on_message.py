@@ -1,3 +1,4 @@
+import os
 import re
 import json
 import random
@@ -24,14 +25,18 @@ class OnMessage(commands.Cog):
 
         # Boost message
         if msg.type == discord.MessageType.premium_guild_subscription:
+            print(msg)
             boosts_channel = msg.guild.get_channel( SemiFunc.get_channel_id(msg, "boosts") )
-            total_boosts = int(boosts_channel.topic.replace("Boost messages! Total boosts: ", ""))
+            total_boosts = re.sub(r'0-9:!', '', boosts_channel.topic)
+            # total_boosts = str(total_boosts).replace("", )
+
+            total_boosts = boosts_channel.topic.replace("Boost messages Total boosts ", "")
+            print(total_boosts)
             boosts = msg.guild.premium_subscription_count
 
             if total_boosts == boosts:
                 total_boosts = total_boosts + 1
-
-            boosts_channel.edit(topic=f"Boost messages! Total boosts: {boosts})")
+            # boosts_channel.edit(topic=f"Thanks for the boost! Current boosts: 16 Total boosts: 16{boosts})")
             await boosts_channel.send(f"Thanks for boosting our server {msg.mention}!\nWe now have {boosts}.. or {total_boosts}, we didn't test this yet.")
 
             return
@@ -39,6 +44,27 @@ class OnMessage(commands.Cog):
 
         if msg.author.bot:
             return
+        
+        # AFK Message
+        if not msg.content.startswith("?"):
+
+            if os.path.exists(afk):
+                with open(afk, "r", encoding="utf8") as file:
+                    data = json.load(file)
+
+                users = data['users']
+
+                if data['users']:
+                    for i, entry in enumerate(users):
+                        if entry['user_id'] == msg.author.id:
+                            users.pop(i)
+
+                            with open(afk, "w", encoding="utf8") as file:
+                                json.dump(data, file, indent=4, ensure_ascii=False)
+
+                            await msg.author.edit(nick=entry['name'], reason="They are baack")
+                            await msg.channel.send(content=f"Welcome back {msg.author.mention}, I removed your AFK status.", delete_after=5)
+
         
         if len(msg.mentions) > 0:
             for mention in msg.mentions:
@@ -55,7 +81,14 @@ class OnMessage(commands.Cog):
 
                             hours, minutes, secondsB = seconds // 3600, (seconds % 3600) // 60, seconds & 60
 
-                            await msg.reply(f"`{entry['name']}` is AFK: {entry['msg']}\nBeen AFK for {hours} hour(s) {minutes} minute(s)")
+                            hours_text = "hour"
+                            minutes_text = "minute"
+                            if minutes > 1 or minutes == 0:
+                                minutes_text = "minutes"
+                            if hours > 1 or hours == 0:
+                                hours_text = "hours"
+                                
+                            await msg.reply(f"`{entry['name']}` is AFK: {entry['msg']}\nBeen AFK for {hours} {hours_text} {minutes} {minutes_text}")
             
         # OwO reaction
         if msg.content.lower() == "owo" or msg.content.lower().find("fox_owo") >= 0:
@@ -94,9 +127,9 @@ class OnMessage(commands.Cog):
 
                 # 3 - If banished_thing in banished_ignore, do not banish
                 for ignore in banished_ignore:
-                    if msg_content_lower.find(ignore) >= 0:
+                    if content_lower_final.find(ignore) >= 0:
                         shouldBanish = False
-                        self.bot.logger.info(msg=f"Don't banish '{msg_content_lower}' sent by {msg.author.name}")
+                        # self.bot.logger.info(msg=f"Don't banish '{msg_content_lower}' sent by {msg.author.name}")
                     
                 if shouldBanish:
                     if msg_content_lower.find(banished_thing) >= 0:
@@ -118,12 +151,13 @@ class OnMessage(commands.Cog):
             # First snowy, and only snowy for now
             if msg_content_lower.find("<:snowypawbs:1468047084664918278>") >= 0:
                 await msg.reply(pawMsg)
-                await msg.delete
+                await msg.delete()
             if len(msg.stickers):
                 for sticker in msg.stickers:
                     if sticker.name == "Snowy Pawbs" or sticker.name == "Snowy Pawbs Real":
                         await msg.reply(pawMsg)
                         await msg.delete()
+
 
 async def setup(bot):
     await bot.add_cog(OnMessage(bot))

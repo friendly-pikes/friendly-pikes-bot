@@ -47,8 +47,6 @@ class Bot(AutoShardedBot):
         embed.set_footer(text="Bot developed by snow2code")
         
         return embed
-    
-    
 
     async def setup_hook(self):
         ## Load listener cogs
@@ -61,13 +59,20 @@ class Bot(AutoShardedBot):
             await self.load_extension(f"listeners.{name}")
             
         ## Load command cogs
-        for file in os.listdir("cogs"):
-            # Ignore files that aren't .py files
-            if not file.endswith(".py"):
-                continue
+        for who in os.listdir("cogs"):
+            gud = True
+            if who == "__pycache__":
+                gud = False
 
-            name = file[:-3]
-            await self.load_extension(f"cogs.{name}")
+
+            if gud:
+                for file in os.listdir(f"cogs/{who}"):
+                    # Ignore files that aren't .py files
+                    if not file.endswith(".py"):
+                        continue
+                    
+                    name = file[:-3]
+                    await self.load_extension(f"cogs.{who}.{name}")
     
     async def process_commands(self, msg: discord.Message):
         ctx = await self.get_context(msg, cls=Context)
