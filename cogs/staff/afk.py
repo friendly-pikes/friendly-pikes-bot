@@ -26,9 +26,14 @@ class afk(commands.Cog):
         
         SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction)
 
-        await SemiFunc.add_afk(ctx, message, return_message)
-        await ctx.author.edit(nick=f"[AFK] {ctx.author.name}", reason="They went AFK")
-        await ctx.reply(content=f"I've updated you to afk with the status `{message}`", ephemeral=True)
+        can_afk = SemiFunc.can_afk__isalready(ctx)
+
+        if can_afk:
+            await SemiFunc.add_afk(ctx, message, return_message)
+            await ctx.author.edit(nick=f"[AFK] {ctx.author.display_name}", reason="They went AFK")
+            await ctx.reply(content=f"I've updated your status to AFK with the message `{message}`", ephemeral=True)
+        else:
+            await ctx.reply(f'Cannot change your status to AFK, you are already "AFK"')
 
 async def setup(bot):
     await bot.add_cog(afk(bot))

@@ -21,12 +21,12 @@ class OnMemberUpdated(commands.Cog):
                 # hope you had a wonderful stay sorry that you had to leave
 
             # Timeout
-            if before.timed_out_until or after.timed_out_until:
-                before_timeout = before.timed_out_until
-                after_timeout = after.timed_out_until
-                print(f"before: {before_timeout.time()}\nafter: {after_timeout.time()}\n")
-                if before_timeout is not None and after_timeout is None:
-                    print(f"{before.name} timeout has expired")
+            # if before.timed_out_until or after.timed_out_until:
+            #     before_timeout = before.timed_out_until
+            #     after_timeout = after.timed_out_until
+            #     print(f"before: {before_timeout.time()}\nafter: {after_timeout.time()}\n")
+            #     if before_timeout is not None and after_timeout is None:
+            #         print(f"{before.name} timeout has expired")
         
         
 async def setup(bot):

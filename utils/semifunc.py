@@ -67,6 +67,34 @@ class SemiFunc():
         
         # return False
     
+    def can_afk__isalreadytrue(ctx: Context):
+        afk = files.get_filepath("afk", "json")
+
+        with open(afk, 'r', encoding='utf8') as file:
+            data = json.load(file)
+
+            afkSince_createdat = ctx.message.created_at.strftime("%d/%m/%Y %H:%M")
+            canAfk = False
+            for entry in data['users']:
+                if entry['user_id'] == ctx.author.id:
+                    canAfk = True
+                    
+            return canAfk
+        
+    def can_afk__isalready(ctx: Context):
+        afk = files.get_filepath("afk", "json")
+
+        with open(afk, 'r', encoding='utf8') as file:
+            data = json.load(file)
+
+            afkSince_createdat = ctx.message.created_at.strftime("%d/%m/%Y %H:%M")
+            canAfk = True
+            for entry in data['users']:
+                if entry['user_id'] == ctx.author.id:
+                    canAfk = False
+                    
+            return canAfk
+
     async def update_afk(ctx: Context, message: str, return_message):
         afk = files.get_filepath("afk", "json")
 
@@ -79,7 +107,7 @@ class SemiFunc():
             if entry['user_id'] == ctx.author.id:
                 entry['msg'] = message
                 break
-                
+                    
         with open(afk, "w", encoding="utf8") as file:
             json.dump(data, file, indent=4, ensure_ascii=False)
 
@@ -94,7 +122,8 @@ class SemiFunc():
             data = json.load(file)
 
             afkSince_createdat = ctx.message.created_at.strftime("%d/%m/%Y %H:%M")
-
+            can_afk = SemiFunc.can_afk__isalready(ctx)
+            
             data['users'].append({
                 "name": ctx.author.display_name,
                 "user_id": ctx.author.id,

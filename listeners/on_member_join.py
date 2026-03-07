@@ -30,7 +30,7 @@ class OnMemberJoin(commands.Cog):
             return
 
         if files.get_config_entry("join_message_enabled"):
-            welcome_channel.send(f"Hello {member.mention}! Welcome to the server! :3")
+            await welcome_channel.send(f"Hello {member.mention}! Welcome to the server! :3")
 
 
         # Join Roles

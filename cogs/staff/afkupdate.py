@@ -26,8 +26,11 @@ class afkupdate(commands.Cog):
         
         SemiFunc.log_command_use(self.bot, ctx.author, ctx.message.content, ctx.interaction)
 
-        await SemiFunc.update_afk(ctx, message, return_message)
-        await ctx.reply(content=f"I've updated your afk status to `{message}`", ephemeral=True)
+        if SemiFunc.can_afk__isalreadytrue(ctx):
+            await SemiFunc.update_afk(ctx, message, return_message)
+            await ctx.reply(content=f"I've updated your afk status to `{message}`", ephemeral=True)
+        else:
+            await ctx.reply("Cannot set your status to AFK, as you didn't use ?afk.")
 
 async def setup(bot):
     await bot.add_cog(afkupdate(bot))

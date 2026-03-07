@@ -22,7 +22,6 @@ class OnMessage(commands.Cog):
         banished_ignore = files._banished()['banishedWordsBypasses']
         msg_content_lower = msg.content.lower()
 
-
         # Boost message
         if msg.type == discord.MessageType.premium_guild_subscription:
             print(msg)
@@ -43,6 +42,13 @@ class OnMessage(commands.Cog):
 
 
         if msg.author.bot:
+            # Delete Dyno's disabled command message, if it was sent
+            if msg.author.id == 155149108183695360:
+                if len(msg.embeds) > 0:
+                    embed:discord.Embed = msg.embeds[0]
+                    if embed.description.find("command is disabled in this server.") >= 0:
+                        await msg.delete()
+
             return
         
         # AFK Message
@@ -88,10 +94,13 @@ class OnMessage(commands.Cog):
                             if hours > 1 or hours == 0:
                                 hours_text = "hours"
                                 
-                            await msg.reply(f"`{entry['name']}` is AFK: {entry['msg']}\nBeen AFK for {hours} {hours_text} {minutes} {minutes_text}")
+                            if minutes > 0 and hours == 0:
+                                await msg.reply(f"`{entry['name']}` is AFK: {entry['msg']}\nThey've been AFK for {minutes} {minutes_text}")
+                            if hours > 0:
+                                await msg.reply(f"`{entry['name']}` is AFK: {entry['msg']}\nThey've been AFK for {hours} {hours_text} {minutes} {minutes_text}")
             
         # OwO reaction
-        if msg.content.lower() == "owo" or msg.content.lower().find("fox_owo") >= 0:
+        if msg.content.lower() == "owo" or msg.content.lower == "<:fox_owo:1479235584127143978>" >= 0:
             # Do not owo react in audits
             if msg.channel.id != SemiFunc.get_channel_id(msg, "audit"):
                 owoId = files.get_emoji_ids(msg)['owo']
